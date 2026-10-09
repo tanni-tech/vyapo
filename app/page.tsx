@@ -1,7 +1,6 @@
 import { Hero } from '@/components/sections/Hero'
 import { ClientMarquee } from '@/components/sections/ClientMarquee'
 import { SectorPanels } from '@/components/sections/SectorPanels'
-import { LiveDemo } from '@/components/sections/LiveDemo'
 import { WorkStrip } from '@/components/sections/WorkStrip'
 import { HowWeWork } from '@/components/sections/HowWeWork'
 import { AllianceSection } from '@/components/sections/AllianceSection'
@@ -15,7 +14,6 @@ export default function HomePage() {
       <Hero />
       <ClientMarquee />
       <SectorPanels />
-      <LiveDemo />
       <WorkStrip />
       <HowWeWork />
       <AllianceSection />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,9 +19,16 @@ type FormData = z.infer<typeof schema>
 
 export function ContactSection() {
   const [submitted, setSubmitted] = useState(false)
+  const [orderDate, setOrderDate] = useState('DD/MM/YYYY')
+  const [orderNumber, setOrderNumber] = useState('----')
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
   })
+
+  useEffect(() => {
+    setOrderDate(new Date().toLocaleDateString('en-IN'))
+    setOrderNumber(String(Math.floor(Math.random() * 9000 + 1000)))
+  }, [])
 
   const onSubmit = async (data: FormData) => {
     playSuccess()
@@ -45,8 +52,8 @@ export function ContactSection() {
           <div className="bg-paper border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] overflow-hidden">
             {/* Slip header */}
             <div className="bg-ink text-paper px-4 py-2 flex items-center justify-between">
-              <span className="font-mono text-xs">ORDER — {new Date().toLocaleDateString('en-IN')}</span>
-              <span className="font-mono text-xs opacity-50">#{Math.floor(Math.random() * 9000 + 1000)}</span>
+              <span className="font-mono text-xs">ORDER — {orderDate}</span>
+              <span className="font-mono text-xs opacity-50">#{orderNumber}</span>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="p-5 space-y-4">

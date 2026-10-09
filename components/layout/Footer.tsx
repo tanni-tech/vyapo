@@ -1,43 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { playTick } from '@/lib/audio'
-
-gsap.registerPlugin(ScrollTrigger)
+import { content } from '@/lib/content'
 
 export function Footer() {
-  const ref = useRef<HTMLElement>(null)
-  const wordmarkRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!wordmarkRef.current) return
-    const ctx = gsap.context(() => {
-      gsap.fromTo(wordmarkRef.current,
-        { yPercent: 100, opacity: 0 },
-        {
-          yPercent: 0,
-          opacity: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: ref.current,
-            start: 'top bottom',
-            end: 'top 60%',
-            scrub: 0.5,
-          },
-        }
-      )
-    }, ref)
-    return () => ctx.revert()
-  }, [])
+  const currentYear = new Date().getFullYear()
 
   return (
-    <footer ref={ref} className="relative bg-ink text-paper overflow-hidden">
-      {/* Giant wordmark curtain reveal */}
+    <footer className="relative bg-ink text-paper overflow-hidden">
+      {/* Giant wordmark — always visible as background */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-        <div ref={wordmarkRef} className="font-display text-[20vw] leading-none text-paper/[0.03] select-none whitespace-nowrap">
+        <div className="font-display text-[20vw] leading-none text-paper/[0.03] select-none whitespace-nowrap">
           VYAPO
         </div>
       </div>
@@ -48,8 +21,13 @@ export function Footer() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               <svg viewBox="0 0 40 40" className="w-8 h-8" aria-hidden="true">
+                <defs>
+                  <linearGradient id="footer-v" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#0052CC" />
+                    <stop offset="100%" stopColor="#FF8C00" />
+                  </linearGradient>
+                </defs>
                 <path d="M8 6h24v4H14v18l14 10V26h4v14H8z" fill="url(#footer-v)" stroke="#f4f6f9" strokeWidth="2" />
-                <defs><linearGradient id="footer-v" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#0052CC" /><stop offset="100%" stopColor="#FF8C00" /></linearGradient></defs>
               </svg>
               <span className="font-display text-xl text-paper">VYAPO</span>
             </div>
@@ -65,7 +43,7 @@ export function Footer() {
             <ul className="space-y-2">
               {['POS Billing', 'EdTech', 'Exam Portal', 'Web & Apps'].map((item) => (
                 <li key={item}>
-                  <Link href="#" onClick={() => playTick()} className="font-body text-sm text-paper/70 hover:text-orange transition-colors">
+                  <Link href="#" className="font-body text-sm text-paper/70 hover:text-orange transition-colors">
                     {item}
                   </Link>
                 </li>
@@ -85,7 +63,7 @@ export function Footer() {
                 { label: 'Terms', href: '/terms' },
               ].map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} onClick={() => playTick()} className="font-body text-sm text-paper/70 hover:text-orange transition-colors">
+                  <Link href={item.href} className="font-body text-sm text-paper/70 hover:text-orange transition-colors">
                     {item.label}
                   </Link>
                 </li>
@@ -101,9 +79,8 @@ export function Footer() {
             </a>
             <p className="font-body text-sm text-paper/40 mb-4">Newtown, Kolkata, India</p>
             <div className="flex gap-3">
-              {/* Social placeholders */}
               {['GH', 'LI', 'TW'].map((social) => (
-                <button key={social} onClick={() => playTick()} className="w-8 h-8 border border-paper/20 rounded flex items-center justify-center font-mono text-[10px] text-paper/40 hover:border-orange hover:text-orange transition-colors">
+                <button key={social} className="w-8 h-8 border border-paper/20 rounded flex items-center justify-center font-mono text-[10px] text-paper/40 hover:border-orange hover:text-orange transition-colors">
                   {social}
                 </button>
               ))}
@@ -122,7 +99,7 @@ export function Footer() {
             <span className="font-display text-sm text-paper/30">ANIBOTIX</span>
           </div>
           <p className="font-body text-xs text-paper/20">
-            © {new Date().getFullYear()} Vyapo Technologies. All rights reserved.
+            &copy; {currentYear} Vyapo Technologies. All rights reserved.
           </p>
         </div>
       </div>

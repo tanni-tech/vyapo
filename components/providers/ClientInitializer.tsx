@@ -1,27 +1,24 @@
 'use client'
 
 import { useEffect } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { playTick } from '@/lib/audio'
-
-gsap.registerPlugin(ScrollTrigger)
+import { audio } from '@/lib/audio'
 
 export function ClientInitializer() {
   useEffect(() => {
+    // Load audio files from /public/audio/ — no-ops if not present yet
+    audio.load()
+
     // Global click-to-tick for all interactive elements
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement
       const interactive = target.closest('a, button, [role="button"], input, select, textarea')
-      if (interactive) playTick()
+      if (interactive) {
+        audio.play('tick')
+      }
     }
     document.addEventListener('click', handleClick, { passive: true })
 
-    ScrollTrigger.refresh()
-
-    return () => {
-      document.removeEventListener('click', handleClick)
-    }
+    return () => document.removeEventListener('click', handleClick)
   }, [])
 
   return null

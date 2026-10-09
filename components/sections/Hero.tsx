@@ -1,122 +1,67 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { playTick } from '@/lib/audio'
 import { content } from '@/lib/content'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
+  const posterRef = useRef<HTMLDivElement>(null)
   const w1Ref = useRef<HTMLDivElement>(null)
   const w2Ref = useRef<HTMLDivElement>(null)
   const bnRef = useRef<HTMLDivElement>(null)
-  const stickerRef = useRef<HTMLDivElement>(null)
-  const posterRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Words slide apart on scroll
-      gsap.to(w1Ref.current, {
-        x: -window.innerWidth * 0.35,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-        },
-      })
-      gsap.to(w2Ref.current, {
-        x: window.innerWidth * 0.35,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-        },
-      })
+    const section = sectionRef.current
+    if (!section) return
 
-      // Bengali tag drifts and rotates
-      gsap.to(bnRef.current, {
-        x: -80,
-        rotation: -12,
-        y: 30,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5,
-        },
-      })
+    let raf: number
+    const tick = () => {
+      const rect = section.getBoundingClientRect()
+      const progress = Math.max(0, Math.min(1, -rect.top / (rect.height * 0.8)))
 
-      // Sticker spins slowly
-      gsap.to(stickerRef.current, {
-        rotation: '+=40',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.8,
-        },
-      })
+      if (posterRef.current) {
+        const s = 1 - progress * 0.15
+        const o = 1 - Math.min(progress * 1.3, 1)
+        posterRef.current.style.transform = `scale(${s})`
+        posterRef.current.style.opacity = String(o)
+      }
+      if (w1Ref.current) {
+        w1Ref.current.style.transform = `translateX(${-progress * 35}vw)`
+      }
+      if (w2Ref.current) {
+        w2Ref.current.style.transform = `translateX(${progress * 35}vw)`
+      }
+      if (bnRef.current) {
+        bnRef.current.style.transform = `translateX(${-progress * 80}px) rotate(${-6 - progress * 6}deg) translateY(${progress * 30}px)`
+      }
+    }
 
-      // Poster scales back and fades
-      gsap.to(posterRef.current, {
-        scale: 0.85,
-        opacity: 0,
-        ease: 'power2.in',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '60% top',
-          scrub: 0.4,
-        },
-      })
-    }, sectionRef)
+    const onScroll = () => {
+      raf = requestAnimationFrame(tick)
+    }
 
-    return () => ctx.revert()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(raf)
+    }
   }, [])
 
   return (
     <section ref={sectionRef} className="relative min-h-screen bg-orange overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top, 0)' }}>
-      <div ref={posterRef} className="relative px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-32 min-h-screen flex flex-col justify-center">
-        {/* Alliance bar / marquee */}
-        <div className="absolute top-0 left-0 right-0 bg-ink text-paper py-2 overflow-hidden border-y-2 border-ink">
-          <div className="marquee-track">
-            <div className="marquee-content">
-              {Array(6).fill(null).map((_, i) => (
-                <span key={i} className="font-body text-xs sm:text-sm font-bold whitespace-nowrap">
-                  {content.allianceBar}<span className="text-orange mx-4">★</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
+      <div ref={posterRef} className="relative px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-32 min-h-screen flex flex-col justify-center transition-transform will-change-transform">
         {/* Bengali tag */}
-        <div ref={bnRef} className="absolute right-4 sm:right-[8vw] top-[18vh] font-bengali text-paper text-4xl sm:text-5xl lg:text-7xl select-none drop-shadow-[4px_4px_0_var(--ink)] -rotate-6 z-10">
+        <div ref={bnRef} className="absolute right-4 sm:right-[8vw] top-[18vh] font-bengali text-paper text-4xl sm:text-5xl lg:text-7xl select-none drop-shadow-[4px_4px_0_var(--ink)] -rotate-6 z-10 will-change-transform">
           ব্যবসা
-        </div>
-
-        {/* 10+ sticker */}
-        <div ref={stickerRef} className="absolute right-4 sm:right-[6vw] bottom-[16vh] w-[clamp(100px,16vw,180px)] aspect-square bg-paper border-[3px] border-ink rounded-full flex flex-col items-center justify-center text-center font-display shadow-[4px_4px_0_var(--ink)] z-10">
-          <span className="text-[clamp(2rem,5vw,3.5rem)] leading-none text-blue">{content.clients[0].split(' ')[0]}</span>
-          <span className="text-[clamp(0.65rem,1.2vw,0.85rem)] leading-tight font-body font-medium px-2">businesses<br/>billing with us</span>
         </div>
 
         {/* Giant VYAPO words */}
         <div className="relative z-0 mt-8">
-          <div ref={w1Ref} className="font-display text-[clamp(5rem,22vw,20rem)] leading-[0.8] text-ink whitespace-nowrap select-none">
+          <div ref={w1Ref} className="font-display text-[clamp(5rem,22vw,20rem)] leading-[0.8] text-ink whitespace-nowrap select-none will-change-transform">
             Vyapo
           </div>
-          <div ref={w2Ref} className="font-display text-[clamp(5rem,22vw,20rem)] leading-[0.8] text-blue whitespace-nowrap select-none -mt-[0.1em]"
+          <div ref={w2Ref} className="font-display text-[clamp(5rem,22vw,20rem)] leading-[0.8] text-blue whitespace-nowrap select-none -mt-[0.1em] will-change-transform"
             style={{ WebkitTextStroke: '3px var(--ink)' }}
           >
             Vyapo
@@ -130,10 +75,10 @@ export function Hero() {
               {content.hero.headline}
             </p>
             <div className="flex flex-wrap gap-3 mt-5">
-              <Link href="/contact" onClick={() => playTick()} className="inline-block font-body text-sm sm:text-base font-bold px-5 py-2.5 bg-orange text-ink border-2 border-ink rounded-lg shadow-[3px_3px_0_var(--ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+              <Link href="/contact" className="inline-block font-body text-sm sm:text-base font-bold px-5 py-2.5 bg-orange text-ink border-2 border-ink rounded-lg shadow-[3px_3px_0_var(--ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all btn-press">
                 {content.hero.cta1}
               </Link>
-              <Link href="/work" onClick={() => playTick()} className="inline-block font-body text-sm sm:text-base font-bold px-5 py-2.5 bg-transparent text-ink border-2 border-ink rounded-lg hover:bg-ink hover:text-paper transition-colors">
+              <Link href="/work" className="inline-block font-body text-sm sm:text-base font-bold px-5 py-2.5 bg-transparent text-ink border-2 border-ink rounded-lg hover:bg-ink hover:text-paper transition-colors btn-press">
                 {content.hero.cta2}
               </Link>
             </div>
@@ -141,14 +86,20 @@ export function Hero() {
         </div>
       </div>
 
-      <style>{`
-        .marquee-track { overflow: hidden; white-space: nowrap; }
-        .marquee-content { display: inline-flex; animation: mq 30s linear infinite; }
-        @keyframes mq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        @media (prefers-reduced-motion: reduce) {
-          .marquee-content { animation: none; }
-        }
-      `}</style>
+      {/* Alliance ticker bar */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 bg-ink text-paper py-2 overflow-hidden border-y-2 border-ink"
+        style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))' }}
+      >
+        <div className="marquee-track">
+          <div className="marquee-content">
+            {Array(6).fill(null).map((_, i) => (
+              <span key={i} className="font-body text-xs sm:text-sm font-bold whitespace-nowrap">
+                {content.allianceBar}<span className="text-orange mx-4">★</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   )
 }

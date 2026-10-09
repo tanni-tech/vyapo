@@ -1,37 +1,54 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { playTick } from '@/lib/audio'
 import { content } from '@/lib/content'
 
-gsap.registerPlugin(ScrollTrigger)
-
 export function VyapoIDTeaser() {
   const sectionRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
+  const copyRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
 
+  // Fade in on scroll
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true)
+      },
+      { threshold: 0.15 }
+    )
+
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
+
+  // Subtle mouse-follow tilt
   useEffect(() => {
     const card = cardRef.current
     if (!card) return
 
-    const ctx = gsap.context(() => {
-      gsap.to(card, {
-        rotateY: 15,
-        rotateX: -5,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 60%',
-          end: 'bottom 40%',
-          scrub: 0.5,
-        },
-      })
-    }, sectionRef)
+    const handleMove = (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect()
+      const x = (e.clientX - rect.left) / rect.width - 0.5
+      const y = (e.clientY - rect.top) / rect.height - 0.5
+      card.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`
+    }
 
-    return () => ctx.revert()
+    const handleLeave = () => {
+      card.style.transform = 'rotateY(0deg) rotateX(0deg)'
+    }
+
+    card.addEventListener('mousemove', handleMove)
+    card.addEventListener('mouseleave', handleLeave)
+    return () => {
+      card.removeEventListener('mousemove', handleMove)
+      card.removeEventListener('mouseleave', handleLeave)
+    }
   }, [])
 
   return (
@@ -39,7 +56,15 @@ export function VyapoIDTeaser() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           {/* ID Card */}
-          <div ref={cardRef} className="shrink-0 w-[300px] sm:w-[340px]">
+          <div
+            ref={cardRef}
+            className="id-card-inner shrink-0 w-[300px] sm:w-[340px] transition-all duration-700"
+            style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0)' : 'translateY(40px)',
+              transitionDelay: '0ms',
+            }}
+          >
             <div className="bg-paper text-ink border-2 border-ink rounded-xl p-6 shadow-[6px_6px_0_var(--ink)]">
               {/* Notch */}
               <div className="flex justify-center -mt-8 mb-4">
@@ -77,7 +102,15 @@ export function VyapoIDTeaser() {
           </div>
 
           {/* Copy */}
-          <div className="text-center lg:text-left">
+          <div
+            ref={copyRef}
+            className="text-center lg:text-left transition-all duration-700"
+            style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0)' : 'translateY(40px)',
+              transitionDelay: '150ms',
+            }}
+          >
             <span className="font-mono text-xs uppercase tracking-widest opacity-50">One account</span>
             <h2 className="font-display text-[clamp(2rem,6vw,5rem)] leading-[0.9] uppercase mt-2">
               {content.vyapoId.tagline}
@@ -86,10 +119,10 @@ export function VyapoIDTeaser() {
               {content.vyapoId.description}
             </p>
             <div className="flex flex-wrap gap-3 mt-8 justify-center lg:justify-start">
-              <Link href="/id/signup" onClick={() => playTick()} className="inline-block font-body text-sm sm:text-base font-bold px-6 py-3 bg-orange text-ink border-2 border-ink rounded-lg shadow-[3px_3px_0_var(--orange)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+              <Link href="/id/signup" onClick={() => playTick()} className="inline-block font-body text-sm sm:text-base font-bold px-6 py-3 bg-orange text-ink border-2 border-ink rounded-lg shadow-[3px_3px_0_var(--ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all btn-press">
                 {content.vyapoId.cta}
               </Link>
-              <Link href="/id/login" onClick={() => playTick()} className="inline-block font-body text-sm sm:text-base font-bold px-6 py-3 bg-transparent text-paper border-2 border-paper/40 rounded-lg hover:bg-paper/10 transition-colors">
+              <Link href="/id/login" onClick={() => playTick()} className="inline-block font-body text-sm sm:text-base font-bold px-6 py-3 bg-transparent text-paper border-2 border-paper/40 rounded-lg hover:bg-paper/10 transition-colors btn-press">
                 Already have an ID?
               </Link>
             </div>

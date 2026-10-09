@@ -1,74 +1,74 @@
-'use client'
+/**
+ * Audio engine — loads real audio files from /public/audio/ at runtime.
+ *
+ * Place your files in public/audio/:
+ *   tick.mp3      — short click for every interaction
+ *   success.mp3   — form submit / verification
+ *   shutter.mp3   — shutter-gate open
+ *   jingle.mp3    — gate "with sound" intro
+ *
+ * All functions are no-ops if the audio directory has no loaded files,
+ * so the site works silently until you drop assets in.
+ */
 
-let audioCtx: AudioContext | null = null
+type SoundName = 'tick' | 'success' | 'shutter' | 'jingle'
 
-function ctx() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
+const AUDIO_DIR = '/audio'
+
+class AudioEngine {
+  private cache: Partial<Record<SoundName, HTMLAudioElement>> = {}
+  private loaded = false
+  private muted = false
+
+  async load() {
+    if (this.loaded) return
+    this.loaded = true
+
+    const names: SoundName[] = ['tick', 'success', 'shutter', 'jingle']
+    for (const name of names) {
+      try {
+        const audio = new Audio(`${AUDIO_DIR}/${name}.mp3`)
+        audio.preload = 'auto'
+        this.cache[name] = audio
+      } catch {
+        // File doesn't exist yet — that's fine, calls are no-ops
+      }
+    }
   }
-  if (audioCtx.state === 'suspended') audioCtx.resume()
-  return audioCtx
-}
 
-function noise(duration: number, vol = 0.3) {
-  const c = ctx()
-  const size = c.sampleRate * duration
-  const buf = c.createBuffer(1, size, c.sampleRate)
-  const data = buf.getChannelData(0)
-  for (let i = 0; i < size; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / size)
-  const src = c.createBufferSource()
-  src.buffer = buf
-  const gain = c.createGain()
-  gain.gain.setValueAtTime(vol, c.currentTime)
-  gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + duration)
-  const filt = c.createBiquadFilter()
-  filt.type = 'bandpass'
-  filt.frequency.value = 2000
-  src.connect(filt).connect(gain).connect(c.destination)
-  src.start()
-}
-
-function tone(freq: number, duration: number, type: OscillatorType = 'sine', vol = 0.15) {
-  const c = ctx()
-  const osc = c.createOscillator()
-  const gain = c.createGain()
-  osc.type = type
-  osc.frequency.setValueAtTime(freq, c.currentTime)
-  gain.gain.setValueAtTime(vol, c.currentTime)
-  gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + duration)
-  osc.connect(gain).connect(c.destination)
-  osc.start()
-  osc.stop(c.currentTime + duration)
-}
-
-function chord(freqs: number[], duration: number, type: OscillatorType = 'triangle') {
-  freqs.forEach((f) => tone(f, duration, type, 0.08))
-}
-
-// ─── Public API ──────────────────────────────────────────────
-
-export function playShutter() {
-  noise(1.2, 0.4)
-  setTimeout(() => noise(0.6, 0.2), 400)
-}
-
-export function playJingle() {
-  // Percussive clicks
-  for (let i = 0; i < 8; i++) {
-    setTimeout(() => tone(800 + i * 200, 0.06, 'square', 0.06), i * 350)
+  play(name: SoundName) {
+    if (this.muted) return
+    const audio = this.cache[name]
+    if (!audio) return
+    audio.currentTime = 0
+    audio.play().catch(() => {})
   }
-  // Warm pad
-  setTimeout(() => {
-    chord([261.63, 329.63, 392.00, 523.25], 2.5, 'triangle') // C major
-    setTimeout(() => chord([293.66, 369.99, 440.00, 587.33], 2.0, 'sine'), 1800) // D major
-  }, 400)
+
+  setMuted(muted: boolean) {
+    this.muted = muted
+  }
+
+  isMuted() {
+    return this.muted
+  }
 }
+
+export const audio = new AudioEngine()
+
+// ─── Public API (same signatures, drop-in replacement) ────────
 
 export function playTick() {
-  tone(1800, 0.03, 'square', 0.04)
+  audio.play('tick')
 }
 
 export function playSuccess() {
-  setTimeout(() => tone(523.25, 0.15, 'sine', 0.1), 0)
-  setTimeout(() => tone(659.25, 0.2, 'sine', 0.12), 120)
+  audio.play('success')
+}
+
+export function playShutter() {
+  audio.play('shutter')
+}
+
+export function playJingle() {
+  audio.play('jingle')
 }
