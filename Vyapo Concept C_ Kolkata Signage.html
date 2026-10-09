@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Vyapo – Concept C: Kolkata Signage</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Rubik:wght@500;700&family=Noto+Sans+Bengali:wght@800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0B132B;--paper:#F4F6F9;--blue:#0052CC;--orange:#FF8C00;--d:'Anton','Impact',sans-serif;--b:'Rubik',Arial,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:inherit;margin:0}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--orange);color:var(--ink);font:500 1.1rem/1.5 var(--b);overflow-x:hidden}
+.top{background:var(--ink);color:var(--paper);padding:.6rem 4vw;font-weight:700;font-size:.85rem;display:flex;justify-content:space-between;gap:1rem}
+.hero{position:relative;padding:5vh 4vw 0;min-height:86vh;overflow:hidden}
+.w{font:400 clamp(5rem,26vw,24rem)/.8 var(--d);text-transform:uppercase;letter-spacing:-.01em;white-space:nowrap;will-change:transform}
+.w1{color:var(--ink)}.w2{color:var(--blue);-webkit-text-stroke:3px var(--ink);margin-top:.05em}
+.bn{position:absolute;right:5vw;top:8vh;font:800 clamp(2rem,7vw,5rem)/1 'Noto Sans Bengali',sans-serif;color:var(--paper);text-shadow:4px 4px 0 var(--ink);transform:rotate(-6deg)}
+.st{position:absolute;right:6vw;bottom:8vh;width:clamp(120px,18vw,200px);aspect-ratio:1;border-radius:50%;background:var(--paper);border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);display:grid;place-content:center;text-align:center;font:400 1.1rem/1.05 var(--d);transform:rotate(10deg)}
+.st b{font:400 clamp(2.2rem,6vw,4rem)/1 var(--d);color:var(--blue)}
+.sub{position:relative;max-width:34ch;margin:2rem 0 3rem;font:700 clamp(1.1rem,2.2vw,1.6rem)/1.3 var(--b);background:var(--paper);border:3px solid var(--ink);padding:1rem 1.2rem;box-shadow:6px 6px 0 var(--ink)}
+.bd{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;border-block:4px solid var(--ink);font:400 2.2rem/1 var(--d);padding:.8rem 0;text-transform:uppercase}
+.bd div{display:inline-block;animation:mq 25s linear infinite}.bd span{color:var(--orange);margin:0 1.2rem}@keyframes mq{to{transform:translateX(-50%)}}
+.sec{display:grid;grid-template-columns:repeat(3,1fr)}
+.sec article{padding:2.5rem 2rem 3rem;border-right:4px solid var(--ink);min-height:320px;display:flex;flex-direction:column;justify-content:space-between}
+.sec article:last-child{border:0}.a1{background:var(--paper)}.a2{background:var(--blue);color:var(--paper)}.a3{background:var(--ink);color:var(--paper)}
+.sec h2{font:400 clamp(2.4rem,5vw,4.4rem)/.9 var(--d);text-transform:uppercase}
+.sec p{font-weight:500;max-width:28ch}
+.sec a{align-self:flex-start;margin-top:1.5rem;background:var(--orange);color:var(--ink);font:700 1rem var(--b);padding:.7rem 1.1rem;border:3px solid var(--ink);text-decoration:none;box-shadow:4px 4px 0 var(--ink)}
+.sec a:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
+@media(max-width:760px){.sec{grid-template-columns:1fr}.sec article{border-right:0;border-bottom:4px solid var(--ink);min-height:0}.bn{top:3vh}.st{bottom:2vh}}
+@media(prefers-reduced-motion:reduce){.bd div{animation:none}}
+</style></head><body>
+<div class="top"><span>Anibotix Alliance | Empowering POS, EdTech &amp; Web Development Ecosystems</span></div>
+<section class="hero"><div class="bn">ব্যবসা</div>
+<div class="w w1" id="w1">Vyapo</div><div class="w w2" id="w2">Vyapo</div>
+<div class="st"><b>10+</b>businesses<br>billing with us</div>
+<p class="sub">POS billing, school and exam software, and websites that work as hard as your shop does.</p></section>
+<div class="bd"><div>Chakhana By Kilo<span>★</span>Veg Spicy Hut<span>★</span>Gharelu Khana<span>★</span>Rainbow School<span>★</span>Chakhana By Kilo<span>★</span>Veg Spicy Hut<span>★</span>Gharelu Khana<span>★</span>Rainbow School<span>★</span></div></div>
+<section class="sec">
+<article class="a1"><h2>Bill it.</h2><p>POS, KOT, GST and stock for restaurants and retail.</p><a href="#">See the POS</a></article>
+<article class="a2"><h2>Teach it.</h2><p>School management and exam portals for institutions.</p><a href="#">See EdTech</a></article>
+<article class="a3"><h2>Build it.</h2><p>Websites, admin panels and apps made to order.</p><a href="#">See our work</a></article>
+</section>
+<script>
+const a=document.getElementById('w1'),b=document.getElementById('w2');
+addEventListener('scroll',()=>{a.style.transform=`translateX(${-scrollY*.25}px)`;b.style.transform=`translateX(${scrollY*.25-60}px)`},{passive:true});
+</script></body></html>

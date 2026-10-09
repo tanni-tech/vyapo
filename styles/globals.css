@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens ────────────────────────────────────────── */
+:root {
+  --ink: #0b132b;
+  --paper: #f4f6f9;
+  --blue: #0052cc;
+  --orange: #ff8c00;
+  --white: #ffffff;
+
+  /* Font size-adjust fallbacks (prevent CLS) */
+  --font-anton-adjust: 0.95;
+  --font-general-adjust: 0.98;
+  --font-bengali-adjust: 1.0;
+  --font-mono-adjust: 0.88;
+
+  --font-anton: 'Anton', sans-serif;
+  --font-general-sans: 'General Sans', 'DM Sans', sans-serif;
+  --font-anek-bangla: 'Anek Bangla', 'Noto Sans Bengali', sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', monospace;
+}
+
+/* ─── Reset & base ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-general-sans);
+  font-size-adjust: var(--font-general-adjust);
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--orange);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font: inherit;
+  border: none;
+  background: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ─── Font-loading fallbacks ───────────────────────────────── */
+.font-display {
+  font-family: var(--font-anton);
+  font-size-adjust: var(--font-anton-adjust);
+}
+.font-body {
+  font-family: var(--font-general-sans);
+  font-size-adjust: var(--font-general-adjust);
+}
+.font-bengali {
+  font-family: var(--font-anek-bangla);
+  font-size-adjust: var(--font-bengali-adjust);
+}
+.font-mono {
+  font-family: var(--font-jetbrains-mono);
+  font-size-adjust: var(--font-mono-adjust);
+}
+
+/* ─── Skip link ────────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  background: var(--blue);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 6px 6px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
+/* ─── Focus rings ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Reduced motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Utility ──────────────────────────────────────────────── */
+.contain-layout-paint {
+  contain: layout paint;
+}
+
+.hard-shadow {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.hard-shadow-blue {
+  box-shadow: 4px 4px 0 var(--blue);
+}
+.hard-shadow-lg {
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+/* ─── Hide scrollbar but keep functionality ────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
