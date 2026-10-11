@@ -12,44 +12,47 @@ const panelLabels = ['paper', 'cobalt', 'ink']
 export function SectorPanels() {
   const [active, setActive] = useState(0)
 
-  // Each panel reveals with IntersectionObserver
-  const panel0 = useReveal({ threshold: 0.3 })
-  const panel1 = useReveal({ threshold: 0.3 })
-  const panel2 = useReveal({ threshold: 0.3 })
+  // Create reveal instances for each panel
+  const reveals = [
+    useReveal({ threshold: 0.25 }),
+    useReveal({ threshold: 0.25 }),
+    useReveal({ threshold: 0.25 }),
+  ]
 
-  // Track which panel is most visible
+  // Track active panel based on visibility
   useEffect(() => {
-    const sections = [panel0.ref.current, panel1.ref.current, panel2.ref.current].filter(Boolean) as HTMLElement[]
+    const refs = reveals.map(r => r.ref.current).filter(Boolean) as HTMLElement[]
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
-            const idx = sections.indexOf(entry.target as HTMLElement)
+          if (entry.isIntersecting) {
+            const idx = refs.indexOf(entry.target)
             if (idx >= 0) setActive(idx)
           }
         })
       },
-      { threshold: [0.3, 0.5, 0.7] }
+      { threshold: 0.4 }
     )
 
-    sections.forEach((s) => observer.observe(s))
+    refs.forEach((r) => observer.observe(r))
     return () => observer.disconnect()
   }, [])
 
   return (
-    <section className="sector-stack" aria-label="Our sectors" style={{ background: panelColors[active] }}>
+    <section aria-label="Our sectors">
       {content.sectors.map((sector, i) => {
-        const reveal = [panel0, panel1, panel2][i]
+        const r = reveals[i]
         return (
-          <div
+          <section
             key={sector.id}
-            ref={reveal.ref as any}
-            className={`sector-panel reveal ${reveal.visible ? 'visible' : ''}`}
+            ref={r.ref as any}
+            className={`min-h-screen flex items-center justify-center overflow-hidden ${r.visible ? 'visible' : 'opacity-0'}`}
             style={{
               backgroundColor: panelColors[i],
               color: panelTextColors[i],
-              transition: 'background-color 0.5s ease, color 0.5s ease',
+              transition: 'opacity 0.7s ease, background-color 0.5s ease, color 0.5s ease',
+              transitionDelay: '0ms',
             }}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-20">
@@ -75,7 +78,7 @@ export function SectorPanels() {
                 </Link>
               </div>
             </div>
-          </div>
+          </section>
         )
       })}
     </section>

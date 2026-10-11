@@ -8,11 +8,11 @@ export function Footer() {
 
   return (
     <footer className="relative bg-ink text-paper overflow-hidden">
-      {/* Giant wordmark — always visible as background */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-        <div className="font-display text-[20vw] leading-none text-paper/[0.03] select-none whitespace-nowrap">
+      {/* Subtle wordmark background */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
+        <span className="font-display text-[15vw] leading-none text-paper/[0.03] whitespace-nowrap">
           VYAPO
-        </div>
+        </span>
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

@@ -1,14 +1,12 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
-import { playTick } from '@/lib/audio'
 import { content } from '@/lib/content'
 
 export function VyapoIDTeaser() {
   const sectionRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
-  const copyRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
 
   // Fade in on scroll
@@ -58,7 +56,7 @@ export function VyapoIDTeaser() {
           {/* ID Card */}
           <div
             ref={cardRef}
-            className="id-card-inner shrink-0 w-[300px] sm:w-[340px] transition-all duration-700"
+            className="shrink-0 w-[300px] sm:w-[340px] transition-all duration-700"
             style={{
               opacity: visible ? 1 : 0,
               transform: visible ? 'translateY(0)' : 'translateY(40px)',
@@ -103,11 +101,11 @@ export function VyapoIDTeaser() {
 
           {/* Copy */}
           <div
-            ref={copyRef}
-            className="text-center lg:text-left transition-all duration-700"
+            className="text-center lg:text-left"
             style={{
               opacity: visible ? 1 : 0,
               transform: visible ? 'translateY(0)' : 'translateY(40px)',
+              transition: 'opacity 0.7s ease, transform 0.7s ease',
               transitionDelay: '150ms',
             }}
           >
@@ -119,10 +117,10 @@ export function VyapoIDTeaser() {
               {content.vyapoId.description}
             </p>
             <div className="flex flex-wrap gap-3 mt-8 justify-center lg:justify-start">
-              <Link href="/id/signup" onClick={() => playTick()} className="inline-block font-body text-sm sm:text-base font-bold px-6 py-3 bg-orange text-ink border-2 border-ink rounded-lg shadow-[3px_3px_0_var(--ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all btn-press">
+              <Link href="/id/signup" className="inline-block font-body text-sm sm:text-base font-bold px-6 py-3 bg-orange text-ink border-2 border-ink rounded-lg shadow-[3px_3px_0_var(--ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
                 {content.vyapoId.cta}
               </Link>
-              <Link href="/id/login" onClick={() => playTick()} className="inline-block font-body text-sm sm:text-base font-bold px-6 py-3 bg-transparent text-paper border-2 border-paper/40 rounded-lg hover:bg-paper/10 transition-colors btn-press">
+              <Link href="/id/login" className="inline-block font-body text-sm sm:text-base font-bold px-6 py-3 bg-transparent text-paper border-2 border-paper/40 rounded-lg hover:bg-paper/10 transition-colors">
                 Already have an ID?
               </Link>
             </div>
