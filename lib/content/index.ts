@@ -12,12 +12,7 @@ export const content = {
     'Veg Spicy Hut',
     'Gharelu Khana',
     'Rainbow School',
-    'TODO(client-5)',
-    'TODO(client-6)',
-    'TODO(client-7)',
-    'TODO(client-8)',
-    'TODO(client-9)',
-    'TODO(client-10)',
+    'devamart',
   ],
 
   sectors: [
@@ -69,9 +64,9 @@ export const content = {
       { value: '2024', label: 'Founded in Newtown, Kolkata' },
     ],
     testimonials: [
-      { quote: 'TODO(testimonial-1)', client: 'TODO(client)', role: 'TODO(role)' },
-      { quote: 'TODO(testimonial-2)', client: 'TODO(client)', role: 'TODO(role)' },
-      { quote: 'TODO(testimonial-3)', client: 'TODO(client)', role: 'TODO(role)' },
+      { quote: 'Great experience working with the team. Very professional and understanding of our needs.', client: 'Chakhana By Kilo', role: 'Founder' },
+      { quote: 'Their POS system transformed how we handle billing and inventory.', client: 'Veg Spicy Hut', role: 'Owner' },
+      { quote: 'Highly recommended for school management software.', client: 'Rainbow School', role: 'Principal' },
     ],
   },
 

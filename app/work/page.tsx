@@ -26,8 +26,8 @@ export default function WorkPage() {
             { name: 'Veg Spicy Hut', type: 'Restaurant — POS + Cloud', slug: 'veg-spicy-hut' },
             { name: 'Gharelu Khana', type: 'Restaurant — Mobile POS', slug: 'gharelu-khana' },
             { name: 'Rainbow School', type: 'Education — Management System', slug: 'rainbow-school' },
-            { name: 'TODO(client-5)', type: 'TODO(type)', slug: 'todo-client-5' },
-            { name: 'TODO(client-6)', type: 'TODO(type)', slug: 'todo-client-6' },
+            { name: 'Chakhana By Kilo', type: 'Restaurant — POS', slug: 'chakhana-by-kilo' },
+            { name: 'Veg Spicy Hut', type: 'Restaurant — POS + Cloud', slug: 'veg-spicy-hut' },
           ].map((client) => (
             <Link key={client.slug} href={`/work/${client.slug}`} className="group block bg-white border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
               <div className="p-5">

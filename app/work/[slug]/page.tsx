@@ -8,8 +8,6 @@ const clients: Record<string, { name: string; type: string; built: string; outco
   'veg-spicy-hut': { name: 'Veg Spicy Hut', type: 'Restaurant', built: 'Cloud POS with inventory tracking and multi-outlet sync.', outcomes: ['5% food waste reduction', 'Real-time stock alerts'] },
   'gharelu-khana': { name: 'Gharelu Khana', type: 'Restaurant', built: 'Simple billing app for a 12-table setup with mobile support.', outcomes: ['Switched from paper in 1 day', 'Owner checks sales from phone'] },
   'rainbow-school': { name: 'Rainbow School', type: 'Education', built: 'Complete school management system with attendance, exams and fees.', outcomes: ['Reduced admin time by 40%', 'Online admission portal'] },
-  'todo-client-5': { name: 'TODO(client-5)', type: 'TODO(type)', built: 'TODO(content)', outcomes: ['TODO(outcome)'] },
-  'todo-client-6': { name: 'TODO(client-6)', type: 'TODO(type)', built: 'TODO(content)', outcomes: ['TODO(outcome)'] },
 }
 
 export default function WorkDetail({ params }: { params: { slug: string } }) {

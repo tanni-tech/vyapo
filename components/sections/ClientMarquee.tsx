@@ -12,6 +12,7 @@ const clientImageMap: Record<string, string> = {
   'Veg Spicy Hut': '/clients/veg-spicy-hut.jpeg',
   'Gharelu Khana': '/clients/gharelu-khana.jpg',
   'Rainbow School': '/clients/rainbow-school.jpeg',
+  'devamart': '/clients/devamart.jpeg',
 }
 
 export function ClientMarquee() {
