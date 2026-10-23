@@ -7,6 +7,13 @@ import { content } from '@/lib/content'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const clientImageMap: Record<string, string> = {
+  'Chakhana By Kilo': '/clients/chakhana-by-kilo.jpeg',
+  'Veg Spicy Hut': '/clients/veg-spicy-hut.jpeg',
+  'Gharelu Khana': '/clients/gharelu-khana.jpg',
+  'Rainbow School': '/clients/rainbow-school.jpeg',
+}
+
 export function ClientMarquee() {
   const trackRef = useRef<HTMLDivElement>(null)
 
@@ -49,11 +56,20 @@ export function ClientMarquee() {
     <section className="bg-ink border-y-4 border-ink overflow-hidden" aria-label="Our clients">
       <div className="py-4">
         <div ref={trackRef} className="flex whitespace-nowrap">
-          {items.map((name, i) => (
-            <span key={i} className="font-display text-2xl sm:text-4xl text-paper/80 px-6 sm:px-10 shrink-0 select-none">
-              {name}<span className="text-orange mx-4">★</span>
-            </span>
-          ))}
+          {items.map((name, i) => {
+            const imagePath = clientImageMap[name] || '/clients/default.png'
+            const altText = name
+            return (
+              <span key={i} className="font-display text-2xl sm:text-4xl text-paper/80 px-6 sm:px-10 shrink-0 select-none">
+                <img
+                  src={imagePath}
+                  alt={altText}
+                  className="h-12 sm:h-16 w-auto me-4 select-none"
+                />
+                {name}<span className="text-orange mx-4">★</span>
+              </span>
+            )
+          })}
         </div>
       </div>
     </section>

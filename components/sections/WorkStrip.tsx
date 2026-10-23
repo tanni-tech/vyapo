@@ -4,6 +4,13 @@ import Link from 'next/link'
 import { useReveal } from '@/lib/useReveal'
 import { content } from '@/lib/content'
 
+const clientImageMap: Record<string, string> = {
+  'Chakhana By Kilo': '/clients/chakhana-by-kilo.jpeg',
+  'Veg Spicy Hut': '/clients/veg-spicy-hut.jpeg',
+  'Gharelu Khana': '/clients/gharelu-khana.jpg',
+  'Rainbow School': '/clients/rainbow-school.jpeg',
+}
+
 export function WorkStrip() {
   const header = useReveal({ threshold: 0.2 })
 
@@ -18,20 +25,27 @@ export function WorkStrip() {
 
       {/* Horizontal scroll strip */}
       <div className="work-strip-track">
-        {content.clients.map((name, i) => (
-          <div key={i} className="work-card">
-            <div className="bg-white border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] h-full flex flex-col">
-              <div className="p-5 flex-1">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-ink/40">Client</span>
-                <h3 className="font-display text-2xl uppercase mt-1">{name}</h3>
-                <p className="font-body text-sm text-ink/70 mt-3">Trusted by {name} for reliable software.</p>
-              </div>
-              <div className="h-32 bg-paper border-t-2 border-ink flex items-center justify-center">
-                <span className="font-mono text-xs text-ink/20">Stub — add logo</span>
+        {content.clients.map((name, i) => {
+          const imagePath = clientImageMap[name] || '/clients/default.png'
+          return (
+            <div key={i} className="work-card">
+              <div className="bg-white border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] h-full flex flex-col">
+                <div className="p-5 flex-1">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-ink/40">Client</span>
+                  <h3 className="font-display text-2xl uppercase mt-1">{name}</h3>
+                  <p className="font-body text-sm text-ink/70 mt-3">Trusted by {name} for reliable software.</p>
+                </div>
+                <div className="h-32 bg-paper border-t-2 border-ink flex items-center justify-center">
+                  <img
+                    src={imagePath}
+                    alt={name}
+                    className="h-24 w-auto max-w-full object-contain"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )
