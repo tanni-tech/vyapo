@@ -135,52 +135,148 @@ img {
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* ─── Scroll-reveal animations ──────────────────────────��──── */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
+/* ─── Scroll-reveal animations ───────────────────────────────────────────
+   Native CSS scroll-driven animations (Chrome 115+, Edge 115+, Opera 101+,
+   Safari 26+, Firefox behind a flag) drive .sfx via view() timelines with
+   no JavaScript. Elements animate IN as they enter the viewport and OUT as
+   they leave, so scrolling up and down replays the motion both ways.
+   Browsers without animation-timeline fall back to the IntersectionObserver
+   in lib/useReveal.ts toggling .visible on .reveal. */
 
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-40px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+@keyframes sfx-up {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.reveal-left.visible {
-  opacity: 1;
-  transform: translateX(0);
+@keyframes sfx-left {
+  from { opacity: 0; transform: translateX(-44px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
-
-.reveal-right {
-  opacity: 0;
-  transform: translateX(40px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+@keyframes sfx-right {
+  from { opacity: 0; transform: translateX(44px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
-.reveal-right.visible {
-  opacity: 1;
-  transform: translateX(0);
+@keyframes sfx-scale {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
+/* Stagger helpers (view-timeline). animation-delay is applied but the
+   timeline still scrubs the whole animation as the element moves. */
+.sfx-delay-1 { animation-delay: 0.1s; }
+.sfx-delay-2 { animation-delay: 0.2s; }
+.sfx-delay-3 { animation-delay: 0.3s; }
+.sfx-delay-4 { animation-delay: 0.4s; }
+
+@supports (animation-timeline: view()) {
+  .sfx {
+    animation: sfx-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 90%;
+  }
+  .sfx.sfx-left  { animation-name: sfx-left; }
+  .sfx.sfx-right { animation-name: sfx-right; }
+  .sfx.sfx-scale { animation-name: sfx-scale; }
+}
+
+/* ── JS fallback for older browsers (no animation-timeline) ────────────── */
+.reveal,
+.reveal-left,
+.reveal-right,
 .reveal-scale {
-  opacity: 0;
-  transform: scale(0.92);
   transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.reveal-scale.visible {
-  opacity: 1;
-  transform: scale(1);
+.reveal       { opacity: 0; transform: translateY(30px); }
+.reveal-left  { opacity: 0; transform: translateX(-40px); }
+.reveal-right { opacity: 0; transform: translateX(40px); }
+.reveal-scale { opacity: 0; transform: scale(0.92); }
+.reveal.visible,
+.reveal-left.visible,
+.reveal-right.visible,
+.reveal-scale.visible { opacity: 1; transform: none; }
+.reveal-delay-1  { transition-delay: 0.1s; }
+.reveal-delay-2  { transition-delay: 0.2s; }
+.reveal-delay-3  { transition-delay: 0.3s; }
+.reveal-delay-4  { transition-delay: 0.4s; }
+
+/* ─── Page backdrop: subtle depth (glow + grid + drifting particles) ──── */
+.page-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1100px 640px at 18% -10%, rgba(0, 82, 204, 0.10), transparent 60%),
+    radial-gradient(900px 560px at 86% 8%, rgba(255, 140, 0, 0.09), transparent 60%),
+    radial-gradient(700px 700px at 50% 120%, rgba(0, 82, 204, 0.06), transparent 60%),
+    var(--paper);
+}
+.backdrop-layer { position: absolute; inset: 0; }
+.backdrop-grid {
+  background-image:
+    linear-gradient(rgba(11, 19, 43, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 19, 43, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, #000 30%, transparent 75%);
+}
+.backdrop-particles { overflow: hidden; }
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(11, 19, 43, 0.12);
+  opacity: var(--op, 0.3);
+  animation: particle-drift var(--dur, 50s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+.particle:nth-child(even) { background: rgba(0, 82, 204, 0.18); }
+.particle:nth-child(3n)   { background: rgba(255, 140, 0, 0.2); }
+@keyframes particle-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(3vw, var(--drift, 10vh), 0); }
+}
+
+/* ─── Depth: layered 3D object (used in hero, product headers) ─────────── */
+.depth-stage {
+  perspective: 1100px;
+  perspective-origin: 50% 40%;
+}
+.depth-stack {
+  transform-style: preserve-3d;
+  animation: depth-float 7s ease-in-out infinite;
+}
+.depth-stack > * { transform-style: preserve-3d; }
+@keyframes depth-float {
+  0%, 100% { transform: rotateX(6deg) rotateY(-14deg) translateY(0); }
+  50%      { transform: rotateX(2deg) rotateY(12deg) translateY(-14px); }
+}
+.depth-layer { position: relative; }
+.depth-shadow {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(-40px);
+  background: rgba(11, 19, 43, 0.35);
+  border-radius: inherit;
+  filter: blur(18px);
+  opacity: 0.35;
+}
+
+/* Depth parallax driven by CSS vars (lib/useParallax.ts sets --tx/--ty) */
+.tilt {
+  transform: rotateX(var(--ty, 0deg)) rotateY(var(--tx, 0deg));
+  transition: transform 0.15s ease-out;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt [data-depth] {
+  transform:
+    translateZ(calc(var(--d, 1) * var(--depth-unit, 16px)))
+    translateX(calc(var(--tx, 0deg) * var(--px, 1px)))
+    translateY(calc(var(--ty, 0deg) * var(--py, 1px)));
+  transition: transform 0.15s ease-out;
+  will-change: transform;
 }
 
 /* ─── Counter animation ────────────────────────────────────── */
@@ -192,24 +288,31 @@ img {
   animation: countUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* ─── Marquee ──────────────────────────────────────────────── */
+/* ─── Marquee ───────────────────────────────────────────────────────────
+   Infinite CSS loop — the content is duplicated once, so translating by
+   -50% lands exactly on the copy and the loop is seamless. No JS. */
+.marquee-band {
+  background: var(--ink);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
 .marquee-track {
   overflow: hidden;
   white-space: nowrap;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 .marquee-content {
   display: inline-flex;
-  animation: marquee 30s linear infinite;
+  animation: marquee 38s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover .marquee-content {
+  animation-play-state: paused;
 }
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* ─── Hero scroll parallax (CSS-only) ──────────────────────── */
-.hero-parallax {
-  will-change: transform, opacity;
-  transition: transform 0.1s linear, opacity 0.3s ease;
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
 }
 
 /* ─── Sector panels ────────────────────────────────────────── */

@@ -5,6 +5,8 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { ShutterGate } from '@/components/layout/ShutterGate'
 import { ClientInitializer } from '@/components/providers/ClientInitializer'
+import { PageBackdrop } from '@/components/layout/PageBackdrop'
+import { ScrollFx } from '@/components/providers/ScrollFx'
 
 const anton = Anton({ subsets: ['latin'], weight: '400', variable: '--font-anton', display: 'swap', preload: true })
 const generalSans = DM_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-general-sans', display: 'swap' })
@@ -31,6 +33,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a href="#main" className="skip-link">Skip to content</a>
         <ClientInitializer />
+        <ScrollFx />
+        <PageBackdrop />
         <ShutterGate />
         <Navbar />
         <main id="main">

@@ -1,100 +1,170 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 import Link from 'next/link'
+import { useReveal } from '@/lib/useReveal'
+import { useParallax } from '@/lib/useParallax'
 import { content } from '@/lib/content'
 
-export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const posterRef = useRef<HTMLDivElement>(null)
-  const w1Ref = useRef<HTMLDivElement>(null)
-  const w2Ref = useRef<HTMLDivElement>(null)
-  const bnRef = useRef<HTMLDivElement>(null)
-  const [scrolled, setScrolled] = useState(0)
-
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-
-    let raf: number
-    const tick = () => {
-      const rect = section.getBoundingClientRect()
-      const progress = Math.max(0, Math.min(1, -rect.top / (rect.height * 0.8)))
-
-      if (posterRef.current) {
-        const s = 1 - progress * 0.15
-        const o = Math.max(0, 1 - progress * 1.3)
-        posterRef.current.style.transform = `scale(${s})`
-        posterRef.current.style.opacity = String(o)
-      }
-      if (w1Ref.current) {
-        w1Ref.current.style.transform = `translateX(${-progress * 35}vw)`
-      }
-      if (w2Ref.current) {
-        w2Ref.current.style.transform = `translateX(${progress * 35}vw)`
-      }
-      if (bnRef.current) {
-        bnRef.current.style.transform = `translateX(${-progress * 80}px) rotate(${-6 - progress * 6}deg) translateY(${progress * 30}px)`
-      }
-    }
-
-    const onScroll = () => {
-      raf = requestAnimationFrame(tick)
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      cancelAnimationFrame(raf)
-    }
-  }, [])
+/**
+ * Right-side layered 3D object. Pure CSS tilt via lib/useParallax (mouse
+ * moves --tx/--ty), layered data-depth children give parallax between the
+ * stacked tiles. A gentle idle float keeps it alive when the pointer is
+ * off. No dependencies — just CSS + a mousemove listener.
+ */
+function HeroStack() {
+  const tiltRef = useParallax<HTMLDivElement>({ strength: 12, perspective: 900 })
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen bg-orange overflow-hidden">
-      <div ref={posterRef} className="relative px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-24 min-h-screen flex flex-col justify-center">
-        {/* Bengali tag */}
-        <div ref={bnRef} className="absolute right-4 sm:right-[8vw] top-[18vh] font-bengali text-paper text-4xl sm:text-5xl lg:text-7xl select-none drop-shadow-[4px_4px_0_rgba(11,19,43,0.8)] -rotate-6 z-10 will-change-transform">
-          ব্যবসা
+    <div className="depth-stage absolute inset-y-0 right-0 hidden md:flex items-center w-[46vw] min-w-[520px] pr-14 select-none" aria-hidden="true">
+      <div ref={tiltRef} className="depth-stack tilt relative w-[380px] h-[480px] mx-auto">
+        {/* Far layer: ghost outline */}
+        <div
+          data-depth="0.35"
+          style={{ '--d': '0.35', '--px': '-6px', '--py': '4px' } as React.CSSProperties}
+          className="absolute -inset-6 rounded-2xl border-2 border-ink/15"
+        />
+        {/* Card 1: POS ticket */}
+        <div
+          data-depth="1"
+          style={{ '--d': '1', '--px': '-14px', '--py': '10px', background: 'var(--white)' } as React.CSSProperties}
+          className="depth-layer absolute left-0 top-6 w-[300px] h-[340px] rounded-xl border-2 border-ink shadow-[6px_6px_0_var(--ink)] p-5"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-ink/40">Order · 04:12</span>
+            <span className="w-3 h-3 rounded-full bg-orange border border-ink" />
+          </div>
+          <div className="space-y-3">
+            {[
+              { n: 'Chicken Biryani', p: '₹320', w: '82%' },
+              { n: 'Cold Coffee', p: '₹150', w: '48%' },
+              { n: 'Gulab Jamun ×2', p: '₹180', w: '64%' },
+            ].map((it) => (
+              <div key={it.n} className="border-b border-dashed border-ink/15 pb-3">
+                <div className="flex justify-between font-body text-sm font-bold">
+                  <span>{it.n}</span>
+                  <span className="text-blue">{it.p}</span>
+                </div>
+                <div className="mt-1.5 h-1 bg-ink/10 rounded-full">
+                  <div className="h-full bg-blue rounded-full" style={{ width: it.w }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex justify-between font-body text-sm font-bold">
+            <span className="text-ink/50">KOT → Kitchen</span>
+            <span className="text-ink">₹650</span>
+          </div>
+          <div className="mt-3 font-mono text-[9px] text-ink/40">GST 12% · invoice #VK-0412</div>
         </div>
 
-        {/* Giant VYAPO words */}
-        <div className="relative z-0 mt-8">
-          <div ref={w1Ref} className="font-display text-[clamp(5rem,22vw,20rem)] leading-[0.8] text-ink whitespace-nowrap select-none will-change-transform">
-            Vyapo
+        {/* Card 2: EdTech grade card */}
+        <div
+          data-depth="1.6"
+          style={{ '--d': '1.6', '--px': '12px', '--py': '-8px', background: 'var(--blue)' } as React.CSSProperties}
+          className="depth-layer absolute right-0 top-52 w-[240px] rounded-xl border-2 border-ink p-4 text-paper shadow-[5px_5px_0_rgba(255,140,0,0.9)]"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-2 h-2 bg-orange rounded-full" />
+            <span className="font-mono text-[10px] uppercase tracking-widest text-paper/60">Grades · Class 8</span>
           </div>
-          <div ref={w2Ref} className="font-display text-[clamp(5rem,22vw,20rem)] leading-[0.8] text-blue whitespace-nowrap select-none -mt-[0.1em] will-change-transform"
-            style={{ WebkitTextStroke: '3px var(--ink)' }}
-          >
-            Vyapo
-          </div>
+          {[
+            { s: 'Mathematics', g: 'A' },
+            { s: 'Science', g: 'A+' },
+            { s: 'English', g: 'B+' },
+          ].map((r) => (
+            <div key={r.s} className="flex items-center justify-between py-1.5 border-b border-paper/15 font-body text-xs">
+              <span className="text-paper/80">{r.s}</span>
+              <span className="font-display text-base text-orange">{r.g}</span>
+            </div>
+          ))}
+          <div className="mt-3 font-mono text-[9px] text-paper/50">Rainbow School · 2024–25</div>
         </div>
 
-        {/* Subhead + CTAs */}
-        <div className="relative z-10 max-w-[34ch] mt-6 sm:mt-8">
-          <div className="bg-paper border-[3px] border-ink p-4 sm:p-5 shadow-[4px_4px_0_var(--ink)]">
-            <p className="font-body text-base sm:text-lg font-bold leading-snug text-ink">
+        {/* Card 3: small stat chip */}
+        <div
+          data-depth="2.2"
+          style={{ '--d': '2.2', '--px': '-22px', '--py': '-4px', background: 'var(--orange)' } as React.CSSProperties}
+          className="depth-layer absolute left-16 bottom-4 w-[180px] rounded-lg border-2 border-ink p-4 shadow-[4px_4px_0_var(--ink)]"
+        >
+          <p className="font-mono text-[9px] uppercase tracking-widest text-ink/50">Today</p>
+          <p className="font-display text-3xl text-ink leading-none mt-1">₹ 42,180</p>
+          <p className="font-body text-[11px] text-ink/60 mt-1">142 orders · 96% on-time</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function Hero() {
+  const kicker = useReveal({ delay: 0, threshold: 0.2 })
+  const head = useReveal({ delay: 100, threshold: 0.2 })
+  const cta = useReveal({ delay: 200, threshold: 0.2 })
+  const stackWrap = useRef<HTMLDivElement>(null)
+
+  return (
+    <section ref={stackWrap} className="relative min-h-[calc(100svh-0px)] overflow-hidden pt-28 sm:pt-32 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-10 lg:gap-16">
+        {/* Left column */}
+        <div className="flex-1 max-w-2xl self-start">
+          <div ref={kicker.ref} className={kicker.className}>
+            <span className="inline-block font-mono text-xs sm:text-sm uppercase tracking-[0.3em] text-ink/50">
+              vyapo · newtown · kolkata
+            </span>
+            <span className="mt-2 block font-bengali text-orange text-lg sm:text-xl -rotate-1 inline-block">
+              ব্যবসার সাথী
+            </span>
+          </div>
+
+          <div ref={head.ref} className={head.className}>
+            <h1 className="font-display text-[clamp(3rem,9vw,8rem)] leading-[0.85] text-ink mt-6">
+              Built to run
+              <br />
+              your <span className="text-blue">business.</span>
+            </h1>
+            <p className="font-body text-base sm:text-lg font-medium text-ink/70 mt-6 max-w-xl leading-relaxed">
               {content.hero.headline}
             </p>
-            <div className="flex flex-wrap gap-3 mt-5">
-              <Link href="/contact" className="inline-block font-body text-sm sm:text-base font-bold px-5 py-2.5 bg-orange text-ink border-2 border-ink rounded-lg shadow-[3px_3px_0_var(--ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+          </div>
+
+          <div ref={cta.ref} className={cta.className}>
+            <div className="flex flex-wrap items-center gap-4 mt-8">
+              <Link href="/contact" className="font-body text-sm sm:text-base font-bold px-6 py-3 bg-ink text-paper border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--orange)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
                 {content.hero.cta1}
               </Link>
-              <Link href="/work" className="inline-block font-body text-sm sm:text-base font-bold px-5 py-2.5 bg-transparent text-ink border-2 border-ink rounded-lg hover:bg-ink hover:text-paper transition-colors">
+              <Link href="/work" className="font-body text-sm sm:text-base font-bold px-6 py-3 bg-paper text-ink border-2 border-ink rounded-lg hover:bg-orange hover:shadow-[4px_4px_0_var(--ink)] transition-all">
                 {content.hero.cta2}
               </Link>
             </div>
+            <div className="mt-10 grid grid-cols-3 gap-4 max-w-lg">
+              {[
+                { n: '10+', l: 'Live businesses' },
+                { n: '3', l: 'Products in prod' },
+                { n: '24/7', l: 'Support line' },
+              ].map((s) => (
+                <div key={s.l}>
+                  <p className="font-display text-2xl sm:text-3xl text-blue">{s.n}</p>
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-ink/40 mt-1">{s.l}</p>
+                </div>
+              ))}
+            </div>
           </div>
+        </div>
+
+        {/* Right column: 3D layered stack */}
+        <div className="hidden md:block w-[46vw] min-w-[520px] relative">
+          <HeroStack />
         </div>
       </div>
 
       {/* Alliance ticker bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 bg-ink text-paper py-2 overflow-hidden border-y-2 border-ink"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0.5rem)' }}
-      >
+      <div className="absolute bottom-0 left-0 right-0 z-20 bg-ink text-paper py-2.5 overflow-hidden border-t-2 border-ink">
         <div className="marquee-track">
           <div className="marquee-content">
             {Array(6).fill(null).map((_, i) => (
               <span key={i} className="font-body text-xs sm:text-sm font-bold whitespace-nowrap">
-                {content.allianceBar}<span className="text-orange mx-4">★</span>
+                {content.allianceBar}
+                <span className="text-orange mx-4">★</span>
               </span>
             ))}
           </div>
