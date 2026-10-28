@@ -16,19 +16,19 @@ function HeroStack() {
   const tiltRef = useParallax<HTMLDivElement>({ strength: 12, perspective: 900 })
 
   return (
-    <div className="depth-stage absolute inset-y-0 right-0 hidden md:flex items-center w-[46vw] min-w-[520px] pr-14 select-none" aria-hidden="true">
-      <div ref={tiltRef} className="depth-stack tilt relative w-[380px] h-[480px] mx-auto">
+    <div className="depth-stage relative flex items-center justify-center h-[300px] sm:h-[400px] select-none" aria-hidden="true">
+      <div ref={tiltRef} className="depth-stack tilt relative w-[300px] h-[300px] sm:w-[340px] sm:h-[400px] mx-auto">
         {/* Far layer: ghost outline */}
         <div
           data-depth="0.35"
           style={{ '--d': '0.35', '--px': '-6px', '--py': '4px' } as React.CSSProperties}
-          className="absolute -inset-6 rounded-2xl border-2 border-ink/15"
+          className="absolute -inset-4 sm:-inset-6 rounded-2xl border-2 border-ink/15"
         />
         {/* Card 1: POS ticket */}
         <div
           data-depth="1"
           style={{ '--d': '1', '--px': '-14px', '--py': '10px', background: 'var(--white)' } as React.CSSProperties}
-          className="depth-layer absolute left-0 top-6 w-[300px] h-[340px] rounded-xl border-2 border-ink shadow-[6px_6px_0_var(--ink)] p-5"
+          className="depth-layer absolute left-0 top-3 sm:top-6 w-[240px] sm:w-[300px] h-[260px] sm:h-[340px] rounded-xl border-2 border-ink shadow-[4px_4px_0_var(--ink)] sm:shadow-[6px_6px_0_var(--ink)] p-4 sm:p-5"
         >
           <div className="flex items-center justify-between mb-4">
             <span className="font-mono text-[10px] uppercase tracking-widest text-ink/40">Order · 04:12</span>
@@ -62,7 +62,7 @@ function HeroStack() {
         <div
           data-depth="1.6"
           style={{ '--d': '1.6', '--px': '12px', '--py': '-8px', background: 'var(--blue)' } as React.CSSProperties}
-          className="depth-layer absolute right-0 top-52 w-[240px] rounded-xl border-2 border-ink p-4 text-paper shadow-[5px_5px_0_rgba(255,140,0,0.9)]"
+          className="depth-layer absolute right-0 top-[42%] sm:top-48 w-[190px] sm:w-[240px] rounded-xl border-2 border-ink p-3 sm:p-4 text-paper shadow-[4px_4px_0_rgba(255,140,0,0.9)]"
         >
           <div className="flex items-center gap-2 mb-3">
             <span className="w-2 h-2 bg-orange rounded-full" />
@@ -85,7 +85,7 @@ function HeroStack() {
         <div
           data-depth="2.2"
           style={{ '--d': '2.2', '--px': '-22px', '--py': '-4px', background: 'var(--orange)' } as React.CSSProperties}
-          className="depth-layer absolute left-16 bottom-4 w-[180px] rounded-lg border-2 border-ink p-4 shadow-[4px_4px_0_var(--ink)]"
+          className="depth-layer absolute left-8 sm:left-16 bottom-0 w-[160px] sm:w-[180px] rounded-lg border-2 border-ink p-3 sm:p-4 shadow-[4px_4px_0_var(--ink)]"
         >
           <p className="font-mono text-[9px] uppercase tracking-widest text-ink/50">Today</p>
           <p className="font-display text-3xl text-ink leading-none mt-1">₹ 42,180</p>
@@ -103,32 +103,32 @@ export function Hero() {
   const stackWrap = useRef<HTMLDivElement>(null)
 
   return (
-    <section ref={stackWrap} className="relative min-h-[calc(100svh-0px)] overflow-hidden pt-28 sm:pt-32 pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-10 lg:gap-16">
+    <section ref={stackWrap} className="relative overflow-hidden pt-20 sm:pt-24 pb-12 sm:pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-8 lg:gap-14 lg:flex-row lg:items-center">
         {/* Left column */}
-        <div className="flex-1 max-w-2xl self-start">
+        <div className="flex-1 max-w-2xl self-center">
           <div ref={kicker.ref} className={kicker.className}>
             <span className="inline-block font-mono text-xs sm:text-sm uppercase tracking-[0.3em] text-ink/50">
               vyapo · newtown · kolkata
             </span>
-            <span className="mt-2 block font-bengali text-orange text-lg sm:text-xl -rotate-1 inline-block">
+            <span className="mt-2 inline-block font-bengali text-orange text-lg sm:text-xl -rotate-1">
               ব্যবসার সাথী
             </span>
           </div>
 
           <div ref={head.ref} className={head.className}>
-            <h1 className="font-display text-[clamp(3rem,9vw,8rem)] leading-[0.85] text-ink mt-6">
+            <h1 className="font-display text-[clamp(2.6rem,7vw,5.5rem)] leading-[0.9] text-ink mt-4">
               Built to run
               <br />
               your <span className="text-blue">business.</span>
             </h1>
-            <p className="font-body text-base sm:text-lg font-medium text-ink/70 mt-6 max-w-xl leading-relaxed">
+            <p className="font-body text-base sm:text-lg font-medium text-ink/70 mt-4 max-w-xl leading-relaxed">
               {content.hero.headline}
             </p>
           </div>
 
           <div ref={cta.ref} className={cta.className}>
-            <div className="flex flex-wrap items-center gap-4 mt-8">
+            <div className="flex flex-wrap items-center gap-4 mt-6">
               <Link href="/contact" className="font-body text-sm sm:text-base font-bold px-6 py-3 bg-ink text-paper border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--orange)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
                 {content.hero.cta1}
               </Link>
@@ -136,7 +136,7 @@ export function Hero() {
                 {content.hero.cta2}
               </Link>
             </div>
-            <div className="mt-10 grid grid-cols-3 gap-4 max-w-lg">
+            <div className="mt-8 grid grid-cols-3 gap-4 max-w-lg">
               {[
                 { n: '10+', l: 'Live businesses' },
                 { n: '3', l: 'Products in prod' },
@@ -152,7 +152,7 @@ export function Hero() {
         </div>
 
         {/* Right column: 3D layered stack */}
-        <div className="hidden md:block w-[46vw] min-w-[520px] relative">
+        <div className="hidden md:block w-[44%] flex-shrink-0">
           <HeroStack />
         </div>
       </div>

@@ -116,6 +116,19 @@ img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+    /* Scroll-driven reveals must not hide content — pin them at the
+       `to` (visible) keyframe so every section shows even when the
+       user prefers reduced motion. */
+    animation-range: none !important;
+    animation-timeline: auto !important;
+  }
+  .sfx,
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
@@ -169,9 +182,12 @@ img {
 
 @supports (animation-timeline: view()) {
   .sfx {
+    /* Fill from both ends so content rests at `to` (visible) while the
+       element is ABOVE the entry range, and at `from` while below the
+       exit range — that is, before it enters and after it leaves. */
     animation: sfx-up linear both;
     animation-timeline: view();
-    animation-range: entry 0% entry 90%;
+    animation-range: entry 0% entry 90%, exit 10% exit 100%;
   }
   .sfx.sfx-left  { animation-name: sfx-left; }
   .sfx.sfx-right { animation-name: sfx-right; }
@@ -252,7 +268,8 @@ img {
   0%, 100% { transform: rotateX(6deg) rotateY(-14deg) translateY(0); }
   50%      { transform: rotateX(2deg) rotateY(12deg) translateY(-14px); }
 }
-.depth-layer { position: relative; }
+/* .depth-layer must not override the Tailwind position utilities on the
+   same element — absolute cards fall back to relative and stack in-flow. */
 .depth-shadow {
   position: absolute;
   inset: 0;
@@ -325,6 +342,13 @@ img {
   align-items: center;
 }
 
+/* ─── Ghost numeral (depth layer on solid bands) ───────────── */
+.ghost-numeral {
+  transform: translateX(var(--gx, 0)) translateY(var(--gy, 0));
+  transition: transform 0.25s ease-out;
+  will-change: transform;
+}
+
 /* ─── Step connector line ──────────────────────────────────── */
 .step-line {
   stroke-dasharray: 100%;
@@ -359,6 +383,12 @@ img {
 }
 .shutter-animate {
   animation: shutterUp 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+/* Gate background grid slowly drifts while the shutter sits */
+@keyframes gate-grid-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 64px 64px; }
 }
 
 /* ─── ID card tilt ─────────────────────────────────────────── */

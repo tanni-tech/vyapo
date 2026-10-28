@@ -41,10 +41,15 @@ export function Footer() {
           <div>
             <h3 className="font-display text-sm uppercase tracking-widest text-paper/40 mb-4">Products</h3>
             <ul className="space-y-2">
-              {['POS Billing', 'EdTech', 'Exam Portal', 'Web & Apps'].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="font-body text-sm text-paper/70 hover:text-orange transition-colors">
-                    {item}
+              {[
+                { label: 'POS Billing', href: '/pos' },
+                { label: 'EdTech', href: '/edtech' },
+                { label: 'Exam Portal', href: '/exam-portal' },
+                { label: 'Web & Apps', href: '/web' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link href={item.href} className="font-body text-sm text-paper/70 hover:text-orange transition-colors">
+                    {item.label}
                   </Link>
                 </li>
               ))}

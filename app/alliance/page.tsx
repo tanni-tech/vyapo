@@ -1,9 +1,11 @@
 
 import Link from 'next/link'
+import { GhostNumeral } from '@/components/layout/GhostNumeral'
 
 export default function AlliancePage() {
   return (
-    <main className="bg-ink min-h-screen">
+    <main className="bg-ink min-h-screen relative overflow-hidden">
+      <GhostNumeral index={2} tone="light" label="Anibotix Alliance" />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
           <span className="font-mono text-xs uppercase tracking-widest text-paper/40">Partnership</span>

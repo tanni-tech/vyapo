@@ -6,25 +6,22 @@ import { useReveal } from '@/lib/useReveal'
 import { content } from '@/lib/content'
 
 export function AllianceSection() {
-  const reveal = useReveal({ threshold: 0.15 })
+  const wordmark = useReveal({ threshold: 0.15 })
+  const lockup = useReveal({ threshold: 0.15, delay: 200 })
+  const cardL = useReveal({ threshold: 0.15, delay: 350 })
+  const cardR = useReveal({ threshold: 0.15, delay: 450 })
 
   return (
     <section className="bg-ink text-paper py-16 sm:py-24 overflow-hidden" aria-label="Anibotix Alliance">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Wordmark */}
-        <div ref={reveal.ref} className={`reveal ${reveal.visible ? 'visible' : ''}`}>
+        <div ref={wordmark.ref} className={wordmark.className}>
           <div className="flex items-center justify-center gap-4 sm:gap-8 mb-8">
-            <span
-              className="font-display text-[clamp(2.5rem,8vw,7rem)] leading-none text-paper inline-block"
-              style={reveal.visible ? { transitionDelay: '0ms' } : undefined}
-            >
+            <span className="font-display text-[clamp(2.5rem,8vw,7rem)] leading-none text-paper inline-block">
               VYAPO
             </span>
             <span className="font-display text-3xl sm:text-5xl text-orange">×</span>
-            <span
-              className="font-display text-[clamp(2.5rem,8vw,7rem)] leading-none text-blue inline-block"
-              style={reveal.visible ? { transitionDelay: '120ms' } : undefined}
-            >
+            <span className="font-display text-[clamp(2.5rem,8vw,7rem)] leading-none text-blue inline-block">
               ANIBOTIX
             </span>
           </div>
@@ -32,29 +29,21 @@ export function AllianceSection() {
 
         {/* Lockup */}
         <div
-          className={`reveal inline-block bg-paper text-ink border-2 border-ink rounded-lg px-6 py-3 shadow-[3px_3px_0_var(--orange)]`}
-          style={reveal.visible ? { transitionDelay: '220ms' } : undefined}
+          ref={lockup.ref}
+          className={`${lockup.className} inline-block bg-paper text-ink border-2 border-ink rounded-lg px-6 py-3 shadow-[3px_3px_0_var(--orange)]`}
         >
-          {reveal.visible && (
-            <span className="font-display text-lg sm:text-xl tracking-wide">VYAPO × ANIBOTIX</span>
-          )}
+          <span className="font-display text-lg sm:text-xl tracking-wide">VYAPO × ANIBOTIX</span>
         </div>
 
         {/* Cards */}
         <div className="mt-12 max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 text-left">
-          <div
-            className={`reveal bg-paper/5 border border-paper/10 rounded-lg p-5`}
-            style={reveal.visible ? { transitionDelay: '350ms' } : undefined}
-          >
+          <div ref={cardL.ref} className={`${cardL.className} bg-paper/5 border border-paper/10 rounded-lg p-5`}>
             <h3 className="font-display text-lg uppercase text-orange mb-2">Vyapo</h3>
             <p className="font-body text-sm text-paper/70 leading-relaxed">
               {content.alliance.vYapo}
             </p>
           </div>
-          <div
-            className={`reveal bg-paper/5 border border-paper/10 rounded-lg p-5`}
-            style={reveal.visible ? { transitionDelay: '450ms' } : undefined}
-          >
+          <div ref={cardR.ref} className={`${cardR.className} bg-paper/5 border border-paper/10 rounded-lg p-5`}>
             <h3 className="font-display text-lg uppercase text-blue mb-2">Anibotix</h3>
             <p className="font-body text-sm text-paper/70 leading-relaxed">
               {content.alliance.anibotix}

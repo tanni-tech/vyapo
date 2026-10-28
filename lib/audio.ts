@@ -27,6 +27,9 @@ class AudioEngine {
     const names: SoundName[] = ['tick', 'success', 'shutter', 'jingle']
     for (const name of names) {
       try {
+        // Probe with HEAD so a missing file doesn't log a 404 per playback
+        const res = await fetch(`${AUDIO_DIR}/${name}.mp3`, { method: 'HEAD' })
+        if (!res.ok) continue
         const audio = new Audio(`${AUDIO_DIR}/${name}.mp3`)
         audio.preload = 'auto'
         this.cache[name] = audio

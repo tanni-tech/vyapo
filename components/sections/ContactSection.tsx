@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { playTick, playSuccess } from '@/lib/audio'
 import { content } from '@/lib/content'
+import { GhostNumeral } from '@/components/layout/GhostNumeral'
 
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -38,7 +39,8 @@ export function ContactSection() {
   }
 
   return (
-    <section className="bg-orange py-16 sm:py-24" id="contact" aria-label="Contact">
+    <section className="bg-orange py-16 sm:py-24 relative overflow-hidden" id="contact" aria-label="Contact">
+      <GhostNumeral index={6} label="Say hello" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-xl mx-auto">
           <div className="text-center mb-10">

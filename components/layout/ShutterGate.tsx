@@ -6,7 +6,7 @@ type GateState = 'closed' | 'opening' | 'open'
 
 export function ShutterGate() {
   const [state, setState] = useState<GateState>('closed')
-  const [countdown, setCountdown] = useState(3)
+  const [countdown, setCountdown] = useState(4)
   const initialized = useRef(false)
 
   // Check session on mount
@@ -54,7 +54,25 @@ export function ShutterGate() {
   return (
     <>
       {!passed && (
-        <div className="fixed inset-0 z-[100] bg-ink flex flex-col items-center justify-center" role="dialog" aria-modal="true" aria-label="Welcome screen">
+        <div className="fixed inset-0 z-[100] bg-ink flex flex-col items-center justify-center overflow-hidden" role="dialog" aria-modal="true" aria-label="Welcome screen">
+          {/* Depth glows */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(700px 500px at 15% 12%, rgba(0,82,204,0.25), transparent 60%), radial-gradient(600px 460px at 85% 88%, rgba(255,140,0,0.16), transparent 60%)',
+            }}
+          />
+          {/* Drifting grid */}
+          <div
+            className="absolute -inset-[64px] pointer-events-none"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(244,246,249,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(244,246,249,0.06) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+              animation: 'gate-grid-drift 28s linear infinite',
+            }}
+          />
           {/* Grain */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
@@ -74,19 +92,31 @@ export function ShutterGate() {
           <h1 className="font-display text-5xl text-paper tracking-tight mb-2">VYAPO</h1>
           <p className="font-bengali text-orange text-lg mb-10">স্বাগতম</p>
 
-          {state === 'closed' && countdown > 0 && (
-            <p className="font-mono text-paper/40 text-sm mb-6">{countdown}</p>
-          )}
+          <p className="font-mono text-paper/30 text-[10px] uppercase tracking-widest mb-6">Newtown · Kolkata · {new Date().getFullYear()}</p>
 
-          <div className="flex flex-col sm:flex-row gap-4 relative z-10">
-            <button onClick={() => enter()} className="font-body text-lg font-bold px-8 py-3 bg-orange text-ink border-2 border-orange rounded-lg shadow-[4px_4px_0_var(--orange)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all btn-press">
+          <div className="flex flex-col sm:flex-row items-center gap-4 relative z-10">
+            <button
+              onClick={() => enter()}
+              className={`font-body text-base sm:text-lg font-bold px-8 py-3 border-2 rounded-lg transition-all btn-press ${
+                countdown > 0
+                  ? 'bg-paper text-ink border-paper opacity-40 cursor-not-allowed'
+                  : 'bg-orange text-ink border-ink shadow-[4px_4px_0_rgba(244,246,249,0.25)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
+              }`}
+              disabled={countdown > 0}
+            >
               Enter site
             </button>
+            <button onClick={() => enter()} className="font-mono text-xs text-paper/30 hover:text-paper/70 transition-colors">
+              Skip →
+            </button>
           </div>
-          <p className="font-bengali text-paper/30 text-xs mt-8">খুলুন</p>
-          <button onClick={() => enter()} className="absolute bottom-6 right-6 font-body text-xs text-paper/30 hover:text-paper/60 underline">
-            Skip
-          </button>
+          {state === 'closed' && countdown > 0 ? (
+            <p className="font-mono text-paper/50 text-sm mt-6" aria-live="polite">
+              Opening in {countdown}
+            </p>
+          ) : (
+            <p className="font-bengali text-orange/80 text-sm mt-6">খুলুন — enter the site</p>
+          )}
         </div>
       )}
 

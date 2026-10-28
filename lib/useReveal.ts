@@ -44,6 +44,13 @@ export function useReveal(opts: RevealOptions = {}) {
       return
     }
 
+    // Reduced motion: skip the hidden state entirely so content is
+    // always visible (mirrors the CSS override in globals.css).
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      setVisible(true)
+      return
+    }
+
     let timeout: ReturnType<typeof setTimeout>
     const observer = new IntersectionObserver(
       ([entry]) => {
