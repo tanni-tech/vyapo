@@ -27,29 +27,39 @@ export function WorkStrip() {
         </div>
       </div>
 
-      {/* Horizontal scroll strip */}
+      {/* Horizontal scroll strip — cards get a 3D hover tilt */}
       <div className="work-strip-track relative z-10">
         {content.clients.map((name, i) => {
           const imagePath = clientImageMap[name] || '/clients/default.png'
           return (
             <div key={i} className="work-card">
-              <div className="bg-white border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] h-full flex flex-col">
+              <div className="work-card-inner group bg-white border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] h-full flex flex-col relative overflow-hidden">
                 <div className="p-5 flex-1">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-ink/40">
-                    0{i + 1} · Client
-                  </span>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-ink/40">
+                      0{i + 1} · Client
+                    </span>
+                    <span className="w-2 h-2 rounded-full bg-orange" />
+                  </div>
                   <h3 className="font-display text-2xl uppercase mt-1">{name}</h3>
                   <p className="font-body text-sm text-ink/70 mt-3">
                     Trusted by {name} for reliable software.
                   </p>
+                  <div className="flex gap-0.5 mt-3">
+                    {Array.from({ length: 5 }).map((_, j) => (
+                      <span key={j} className="text-xs text-orange">★</span>
+                    ))}
+                  </div>
                 </div>
-                <div className="h-32 bg-paper border-t-2 border-ink flex items-center justify-center overflow-hidden">
+                <div className="h-36 bg-paper border-t-2 border-ink flex items-center justify-center overflow-hidden">
                   <img
                     src={imagePath}
                     alt={name}
-                    className="h-24 w-auto max-w-full object-contain transition-transform duration-500 hover:scale-105"
+                    className="h-28 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
+                {/* Corner accent */}
+                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-orange/50 rounded-tr-lg" />
               </div>
             </div>
           )

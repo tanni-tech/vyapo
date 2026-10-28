@@ -436,9 +436,18 @@ img {
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.3s ease;
 }
+.work-card-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease;
+  will-change: transform;
+}
+.work-card:hover .work-card-inner {
+  transform: rotateY(-5deg) rotateX(4deg) translateY(-6px) scale(1.03);
+  box-shadow: 8px 12px 0 rgba(255, 140, 0, 0.5);
+}
 .work-card:hover {
-  transform: rotateY(-4deg) rotateX(3deg) translateY(-5px) scale(1.02);
-  box-shadow: 6px 10px 0 rgba(255, 140, 0, 0.4);
   z-index: 1;
 }
 
