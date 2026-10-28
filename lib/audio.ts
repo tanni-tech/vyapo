@@ -25,10 +25,13 @@ class AudioEngine {
     this.loaded = true
 
     const names: SoundName[] = ['tick', 'success', 'shutter', 'jingle']
+    // Fetch them in sequence, but use GET (not HEAD) so the browser
+    // doesn't log a 404 for HEAD specifically — 404s for GET are
+    // expected and the browser will not re-log them on subsequent
+    // cache hits. Wrap in try/catch so missing files are silent.
     for (const name of names) {
       try {
-        // Probe with HEAD so a missing file doesn't log a 404 per playback
-        const res = await fetch(`${AUDIO_DIR}/${name}.mp3`, { method: 'HEAD' })
+        const res = await fetch(`${AUDIO_DIR}/${name}.mp3`, { method: 'GET' })
         if (!res.ok) continue
         const audio = new Audio(`${AUDIO_DIR}/${name}.mp3`)
         audio.preload = 'auto'

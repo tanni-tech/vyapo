@@ -2,6 +2,7 @@
 
 import { useReveal } from '@/lib/useReveal'
 import { content } from '@/lib/content'
+import { GhostNumeral } from '@/components/layout/GhostNumeral'
 
 const steps = content.howWeWork.steps
 
@@ -9,10 +10,11 @@ export function HowWeWork() {
   const header = useReveal({ threshold: 0.2 })
 
   return (
-    <section className="py-20 sm:py-28" aria-label="How we work">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 sm:py-28 relative overflow-hidden parallax-host" aria-label="How we work">
+      <GhostNumeral index={5} label="Process" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div ref={header.ref} className={`text-center mb-14 ${header.className}`}>
-          <span className="font-mono text-xs uppercase tracking-widest text-ink/40">Process</span>
+          <span className="font-mono text-xs uppercase tracking-widest text-ink/40">05 — Process</span>
           <h2 className="font-display text-[clamp(2rem,5vw,4rem)] leading-[0.9] uppercase text-ink mt-2">How we work</h2>
         </div>
 

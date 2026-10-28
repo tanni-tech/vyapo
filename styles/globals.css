@@ -26,10 +26,23 @@
 }
 
 html {
-  scroll-behavior: auto;
+  /* Smooth scroll only when the browser doesn't override it — Next.js
+     route transitions use scroll-behavior:auto to avoid animating
+     programmatic scrolls, so we let the user's scroll (anchor, wheel)
+     be smooth but leave programmatic jumps instant. */
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
+}
+
+/* Next.js sets this when it wants to disable smooth scrolling for a
+   route transition; honour it. */
+html[data-scroll-behavior="smooth"] {
+  scroll-behavior: smooth;
+}
+html[data-scroll-behavior="auto"] {
+  scroll-behavior: auto;
 }
 
 body {
@@ -332,6 +345,50 @@ img {
   to   { transform: translate3d(-50%, 0, 0); }
 }
 
+/* Card marquee variant — slower, cards have gap */
+.marquee-content-cards {
+  animation: marquee 30s linear infinite;
+  gap: 0.75rem;
+  padding: 0 0.375rem;
+}
+.marquee-content-cards:hover {
+  animation-play-state: paused;
+}
+
+/* ─── Client card (3D hover) ────────────────────────────────────────── */
+.client-card {
+  perspective: 600px;
+}
+.client-card-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 190px;
+  min-height: 190px;
+  background: var(--ink);
+  border: 1.5px solid var(--paper);
+  border-radius: 8px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transform: rotateY(-3deg) rotateX(2deg);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s ease;
+  box-shadow: 3px 3px 0 rgba(255, 140, 0, 0.35);
+  will-change: transform;
+}
+.client-card:hover .client-card-inner {
+  transform: rotateY(0deg) rotateX(0deg) translateY(-4px) scale(1.03);
+  box-shadow: 6px 8px 0 rgba(255, 140, 0, 0.5);
+}
+/* Subtle depth layers inside the card via translateZ */
+.client-card-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 140, 0, 0.04) 100%);
+  pointer-events: none;
+}
+
 /* ─── Sector panels ────────────────────────────────────────── */
 .sector-stack {
   position: relative;
@@ -374,6 +431,98 @@ img {
   scroll-snap-align: start;
   flex: 0 0 auto;
   width: min(340px, 85vw);
+  perspective: 700px;
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s ease;
+}
+.work-card:hover {
+  transform: rotateY(-4deg) rotateX(3deg) translateY(-5px) scale(1.02);
+  box-shadow: 6px 10px 0 rgba(255, 140, 0, 0.4);
+  z-index: 1;
+}
+
+/* ─── Scroll-driven parallax layers ─────────────────────────────
+   Applied to decorative elements inside sections. The element is
+   translated vertically by a fraction of the section's scroll
+   progress. `--parallax-amount` sets the max translate in px.
+   No JS needed — driven by the .sda class set by ScrollFx. */
+
+.parallax-layer {
+  will-change: transform;
+  transform: translateY(calc(var(--parallax-progress, 0) * var(--parallax-amount, -60px)));
+}
+
+/* SDA mode: the section itself gets a view() timeline for --parallax-progress.
+   When .sda is active on <html>, attach animation to .parallax-host so it
+   produces the progress value. */
+@supports (animation-timeline: view()) {
+  .sda .parallax-host {
+    /* Runs as the host enters and exits; outputs 0 → 1 */
+    animation: parallax-progress linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+  .sda .parallax-host .parallax-layer {
+    /* Use the host's progress via CSS custom property set on animation frames */
+    transform: translateY(
+      calc(
+        (var(--parallax-progress, 0) - 0.5) * var(--parallax-amount, -80px)
+      )
+    );
+  }
+}
+
+@keyframes parallax-progress {
+  from { --parallax-progress: 0; }
+  to   { --parallax-progress: 1; }
+}
+
+/* Register the custom property so it can be interpolated by the keyframe */
+@property --parallax-progress {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: true;
+}
+
+/* ─── Hero scroll parallax: decorative shapes drift at different rates */
+.hero-parallax-shape {
+  will-change: transform;
+}
+
+@supports (animation-timeline: scroll()) {
+  .sda .hero-parallax-shape {
+    animation: hero-drift linear both;
+    animation-timeline: scroll();
+    animation-range: 0px 1200px;
+  }
+  .sda .hero-parallax-shape:nth-child(1) {
+    --hero-amount: -40px;
+  }
+  .sda .hero-parallax-shape:nth-child(2) {
+    --hero-amount: -80px;
+  }
+  .sda .hero-parallax-shape:nth-child(3) {
+    --hero-amount: -140px;
+  }
+}
+
+@keyframes hero-drift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(var(--hero-amount, -60px)); }
+}
+
+/* ─── Subtle asset animation: floating badge chips ───────────── */
+@keyframes float-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(1deg); }
+}
+.float-bob {
+  animation: float-bob 4s ease-in-out infinite;
+}
+.float-bob-slow {
+  animation: float-bob 6s ease-in-out infinite;
+  animation-delay: 1s;
 }
 
 /* ─── Shutter gate ─────────────────────────────────────────── */

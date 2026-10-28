@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { useReveal } from '@/lib/useReveal'
 import { content } from '@/lib/content'
+import { GhostNumeral } from '@/components/layout/GhostNumeral'
 
 function animateCounter(el: HTMLElement, target: string, duration = 1500) {
   const numMatch = target.match(/(\d+)/)
@@ -79,8 +80,9 @@ export function Proof() {
   const header = useReveal({ threshold: 0.2 })
 
   return (
-    <section className="bg-paper py-16 sm:py-24" aria-label="Proof">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-paper py-16 sm:py-24 relative overflow-hidden parallax-host" aria-label="Proof">
+      <GhostNumeral index={6} label="By the numbers" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div ref={header.ref} className={`text-center mb-12 ${header.className}`}>
           <span className="font-mono text-xs uppercase tracking-widest text-ink/40">Numbers</span>
           <h2 className="font-display text-[clamp(2rem,5vw,4rem)] leading-[0.9] uppercase text-ink mt-2">By the numbers</h2>

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${anton.variable} ${generalSans.variable} ${anekBangla.variable} ${jetbrainsMono.variable}`} style={{ scrollBehavior: 'smooth' }}>
+    <html lang="en" className={`${anton.variable} ${generalSans.variable} ${anekBangla.variable} ${jetbrainsMono.variable}`}>
       <body>
         <a href="#main" className="skip-link">Skip to content</a>
         <ClientInitializer />

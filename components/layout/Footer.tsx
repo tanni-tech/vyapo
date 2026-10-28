@@ -8,14 +8,23 @@ export function Footer() {
 
   return (
     <footer className="relative bg-ink text-paper overflow-hidden">
-      {/* Subtle wordmark background */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
-        <span className="font-display text-[15vw] leading-none text-paper/[0.03] whitespace-nowrap">
+      {/* Subtle wordmark background — sits behind all content, clipped to
+          the footer's own box so it never bleeds into the ContactSection
+          above it. Rendered at low opacity so it's a texture, not a
+          heading. */}
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+        aria-hidden="true"
+      >
+        <span
+          className="font-display leading-none text-paper/[0.03] whitespace-nowrap"
+          style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}
+        >
           VYAPO
         </span>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">

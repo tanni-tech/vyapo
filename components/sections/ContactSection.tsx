@@ -40,7 +40,7 @@ export function ContactSection() {
 
   return (
     <section className="bg-orange py-16 sm:py-24 relative overflow-hidden" id="contact" aria-label="Contact">
-      <GhostNumeral index={6} label="Say hello" />
+      <GhostNumeral index={7} label="Say hello" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-xl mx-auto">
           <div className="text-center mb-10">
