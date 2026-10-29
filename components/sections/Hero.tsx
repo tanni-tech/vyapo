@@ -145,9 +145,9 @@ function HeroLaptop() {
 }
 
 export function Hero() {
-  const kicker = useReveal({ delay: 0, threshold: 0.2 })
-  const head = useReveal({ delay: 100, threshold: 0.2 })
-  const cta = useReveal({ delay: 200, threshold: 0.2 })
+  const kicker = useReveal({ delay: 0 })
+  const head = useReveal({ delay: 0.1 })
+  const cta = useReveal({ delay: 0.2 })
 
   return (
     <section className="relative overflow-hidden pt-20 sm:pt-24 pb-12 sm:pb-16">
@@ -170,11 +170,11 @@ export function Hero() {
         {/* Left column */}
         <div className="flex-1 max-w-2xl self-center">
           <div ref={kicker.ref} className={kicker.className}>
-            <span className="inline-block font-mono text-xs sm:text-sm uppercase tracking-[0.3em] text-ink/50">
+            <span className="inline-block font-mono text-xs sm:text-sm uppercase tracking-[0.3em] text-ink/50 rpad-2">
               vyapo · newtown · kolkata
             </span>
             <span className="mt-2 inline-block font-bengali text-orange text-lg sm:text-xl -rotate-1">
-              ब्यवसার সাথী
+               ব্যবসাার সাথী
             </span>
           </div>
 
@@ -219,19 +219,6 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Alliance ticker bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 bg-ink text-paper py-2.5 overflow-hidden border-t-2 border-ink">
-        <div className="marquee-track">
-          <div className="marquee-content">
-            {Array(6).fill(null).map((_, i) => (
-              <span key={i} className="font-body text-xs sm:text-sm font-bold whitespace-nowrap">
-                {content.allianceBar}
-                <span className="text-orange mx-4">★</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
     </section>
   )
 }

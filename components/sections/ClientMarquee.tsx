@@ -16,14 +16,14 @@ export function ClientMarquee() {
   const items = [...content.clients, ...content.clients]
 
   return (
-    <section className="marquee-band overflow-hidden" aria-label="Our clients">
+    <section className="marquee-band overflow-hidden relative" aria-label="Our clients">
       <div className="py-4">
         <div className="marquee-track">
           <div className="marquee-content">
             {items.map((name, i) => {
-              const imagePath = clientImageMap[name] || '/clients/default.png'
+              const imagePath = clientImageMap[name] || '/brand/vyapo-mark.png'
               return (
-                <span key={i} aria-hidden={i >= content.clients.length} className="font-display text-2xl sm:text-4xl text-paper/80 px-6 sm:px-10 shrink-0">
+                <span key={i} aria-hidden={i >= content.clients.length} className="font-display text-2xl sm:text-4xl text-paper px-6 sm:px-10 shrink-0">
                   <img
                     src={imagePath}
                     alt={i < content.clients.length ? name : ''}

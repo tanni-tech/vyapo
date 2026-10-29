@@ -3,7 +3,6 @@ import { Anton, Anek_Bangla, JetBrains_Mono, DM_Sans } from 'next/font/google'
 import '../styles/globals.css'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import { ShutterGate } from '@/components/layout/ShutterGate'
 import { ClientInitializer } from '@/components/providers/ClientInitializer'
 import { PageBackdrop } from '@/components/layout/PageBackdrop'
 import { ScrollFx } from '@/components/providers/ScrollFx'
@@ -35,7 +34,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ClientInitializer />
         <ScrollFx />
         <PageBackdrop />
-        <ShutterGate />
         <Navbar />
         <main id="main">
           {children}

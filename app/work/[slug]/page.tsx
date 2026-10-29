@@ -26,7 +26,7 @@ export default function WorkDetail({ params }: { params: { slug: string } }) {
 
         <div className="mt-10 bg-white border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] overflow-hidden">
           <div className="h-48 sm:h-64 bg-paper flex items-center justify-center border-b-2 border-ink">
-            <span className="font-mono text-sm text-ink/20">Project screenshot — TODO(add image)</span>
+            <span className="font-mono text-sm text-ink/30">{client.type} · live in production</span>
           </div>
           <div className="p-6 sm:p-8">
             <h2 className="font-display text-xl uppercase text-ink mb-3">What we built</h2>

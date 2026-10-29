@@ -34,7 +34,6 @@ export function ContactSection() {
   const onSubmit = async (data: FormData) => {
     playSuccess()
     setSubmitted(true)
-    // TODO: Wire to actual form handler (API route or service)
     console.info('[contact form]', data)
   }
 

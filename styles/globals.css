@@ -417,18 +417,22 @@ img {
 }
 
 /* ─── Work strip ───────────────────────────────────────────── */
-.work-strip-track {
+.work-marquee-track {
+  /* extra top/bottom padding so the 3D hover rotation never clips */
+  padding: 2rem 0;
+  margin: 0 -1rem;
+}
+.work-marquee-track .marquee-content-cards {
   display: flex;
   gap: 1.5rem;
   padding: 0 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  animation: marquee 40s linear infinite;
+  will-change: transform;
 }
-.work-strip-track::-webkit-scrollbar { display: none; }
+.work-marquee-track:hover .marquee-content-cards {
+  animation-play-state: paused;
+}
 .work-card {
-  scroll-snap-align: start;
   flex: 0 0 auto;
   width: min(340px, 85vw);
   perspective: 700px;

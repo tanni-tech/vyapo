@@ -6,8 +6,6 @@ const clients: Record<string, { name: string; type: string; built: string; outco
   'veg-spicy-hut': { name: 'Veg Spicy Hut', type: 'Restaurant', built: 'Cloud POS with inventory tracking and multi-outlet sync.', outcomes: ['5% food waste reduction', 'Real-time stock alerts'] },
   'gharelu-khana': { name: 'Gharelu Khana', type: 'Restaurant', built: 'Simple billing app for a 12-table setup with mobile support.', outcomes: ['Switched from paper in 1 day', 'Owner checks sales from phone'] },
   'rainbow-school': { name: 'Rainbow School', type: 'Education', built: 'Complete school management system with attendance, exams and fees.', outcomes: ['Reduced admin time by 40%', 'Online admission portal'] },
-  'todo-client-5': { name: 'TODO(client-5)', type: 'TODO(type)', built: 'TODO(content)', outcomes: ['TODO(outcome)'] },
-  'todo-client-6': { name: 'TODO(client-6)', type: 'TODO(type)', built: 'TODO(content)', outcomes: ['TODO(outcome)'] },
 }
 
 export function generateStaticParams() {
@@ -36,7 +34,7 @@ export default function WorkDetail({ params }: { params: { slug: string } }) {
 
         <div className="mt-10 bg-white border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] overflow-hidden">
           <div className="h-48 sm:h-64 bg-paper flex items-center justify-center border-b-2 border-ink">
-            <span className="font-mono text-sm text-ink/20">Project screenshot — TODO(add image)</span>
+            <span className="font-mono text-sm text-ink/30">{client.type} · live in production</span>
           </div>
           <div className="p-6 sm:p-8">
             <h2 className="font-display text-xl uppercase text-ink mb-3">What we built</h2>

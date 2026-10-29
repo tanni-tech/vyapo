@@ -47,7 +47,7 @@ export default function DashboardPage() {
         {/* Workspace info */}
         <div className="mt-12 bg-white border-2 border-ink rounded-lg shadow-[4px_4px_0_var(--ink)] p-6">
           <h3 className="font-display text-lg uppercase text-ink mb-4">Workspaces</h3>
-          <p className="font-body text-sm text-ink/50">You have 1 workspace: <span className="text-ink font-medium">TODO(workspace-name)</span></p>
+          <p className="font-body text-sm text-ink/50">You have 1 workspace: <span className="text-ink font-medium">My Business</span></p>
           <button className="mt-4 font-body text-xs font-bold px-4 py-2 bg-orange text-ink border-2 border-ink rounded-lg hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none shadow-[2px_2px_0_var(--ink)] transition-all">
             + Add workspace
           </button>

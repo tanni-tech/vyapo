@@ -5,47 +5,23 @@ import { useReveal } from '@/lib/useReveal'
 import { content } from '@/lib/content'
 import { GhostNumeral } from '@/components/layout/GhostNumeral'
 
-function animateCounter(el: HTMLElement, target: string, duration = 1500) {
-  const numMatch = target.match(/(\d+)/)
-  if (!numMatch) { el.textContent = target; return }
-
-  const targetNum = parseInt(numMatch[1])
-  const prefix = target.slice(0, numMatch.index)
-  const suffix = target.slice(numMatch.index! + numMatch[1].length)
-  const start = performance.now()
-
-  function tick(now: number) {
-    const elapsed = now - start
-    const progress = Math.min(elapsed / duration, 1)
-    const eased = 1 - Math.pow(1 - progress, 3)
-    const current = Math.round(targetNum * eased)
-    el.textContent = `${prefix}${current}${suffix}`
-    if (progress < 1) requestAnimationFrame(tick)
-    else el.textContent = target
-  }
-
-  requestAnimationFrame(tick)
-}
-
 function CounterCard({ counter, index }: {
   counter: (typeof content.proof.counters)[number]
   index: number
 }) {
-  const r = useReveal({ threshold: 0.25, delay: index * 100 })
+  const r = useReveal({ delay: index * 0.05 })
   const numRef = useRef<HTMLParagraphElement>(null)
-  const animated = useRef(false)
 
   useEffect(() => {
-    if (r.visible && !animated.current && numRef.current) {
-      animated.current = true
-      animateCounter(numRef.current, counter.value)
-    }
-  }, [r.visible, counter.value])
+    if (!numRef.current) return
+    const suffix = 'suffix' in counter ? (counter as { suffix: string }).suffix : ''
+    numRef.current.textContent = `${counter.value}${suffix}`
+  }, [counter.value])
 
   return (
     <div ref={r.ref} className={`${r.className} bg-white border-2 border-ink rounded-lg p-6 text-center shadow-[4px_4px_0_var(--ink)]`}>
       <p ref={numRef} className="font-display text-5xl sm:text-6xl text-blue">
-        {counter.value}
+        {counter.value}{('suffix' in counter ? (counter as { suffix: string }).suffix : '')}
       </p>
       <p className="font-body text-sm text-ink/60 mt-2">{counter.label}</p>
     </div>
@@ -57,7 +33,7 @@ function TestimonialCard({ t, index, delay }: {
   index: number
   delay: number
 }) {
-  const r = useReveal({ threshold: 0.25, delay })
+  const r = useReveal({ delay: index * 0.05 })
   return (
     <div ref={r.ref} className={`${r.className} bg-white border-2 border-ink rounded-lg p-6 shadow-[4px_4px_0_var(--ink)]`}>
       <div className="flex gap-1 mb-3">
@@ -77,7 +53,7 @@ function TestimonialCard({ t, index, delay }: {
 }
 
 export function Proof() {
-  const header = useReveal({ threshold: 0.2 })
+  const header = useReveal({})
 
   return (
     <section className="bg-paper py-16 sm:py-24 relative overflow-hidden parallax-host" aria-label="Proof">
@@ -98,7 +74,7 @@ export function Proof() {
         {/* Testimonials */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {content.proof.testimonials.map((t, i) => (
-            <TestimonialCard key={i} t={t} index={i} delay={i * 120} />
+            <TestimonialCard key={i} t={t} index={i} delay={i * 0.1} />
           ))}
         </div>
       </div>

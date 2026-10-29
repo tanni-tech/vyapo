@@ -54,14 +54,13 @@ export const content = {
   alliance: {
     vYapo: 'We build the software that runs businesses — from restaurant POS to school management to exam platforms. Every product ships with a real support line and Indian-first features.',
     anibotix: 'Anibotix brings robotics and automation to the table. Together we cover the full stack: the brain (Vyapo software) and the hands (Anibotix hardware).',
-    todo: true,
   },
 
   proof: {
     counters: [
-      { value: '10+', label: 'Businesses billing with us' },
-      { value: '3', label: 'Core products in production' },
-      { value: '2024', label: 'Founded in Newtown, Kolkata' },
+      { value: 10, suffix: '+', label: 'Businesses billing with us' },
+      { value: 3, suffix: '', label: 'Core products in production' },
+      { value: 2024, suffix: '', label: 'Founded in Newtown, Kolkata' },
     ],
     testimonials: [
       { quote: 'Great experience working with the team. Very professional and understanding of our needs.', client: 'Chakhana By Kilo', role: 'Founder' },
@@ -74,6 +73,10 @@ export const content = {
     tagline: 'One ID for everything Vyapo builds.',
     description: 'Sign up once. Access POS, EdTech, exam portals and future products with a single Vyapo ID.',
     cta: 'Get your Vyapo ID',
+    card: {
+      name: 'Business Owner',
+      workspace: 'My Business',
+    },
   },
 
   contact: {

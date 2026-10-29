@@ -17,7 +17,7 @@ export function SectorPanels() {
 }
 
 function SectorPanel({ sector, index }: { sector: (typeof content.sectors)[number]; index: number }) {
-  const r = useReveal({ threshold: 0.25 })
+  const r = useReveal({})
   const side = index % 2 === 0 ? 'left' : 'right'
 
   return (
@@ -32,7 +32,7 @@ function SectorPanel({ sector, index }: { sector: (typeof content.sectors)[numbe
               0{index + 1} — {panelLabels[index]}
             </span>
             <span className="h-px flex-1 bg-ink/15" aria-hidden="true" />
-            <span className="font-bengali text-orange text-sm">ব্যবস</span>
+            <span className="font-bengali text-orange text-sm">ব্যবসা</span>
           </div>
           <h2 className="font-display text-[clamp(3rem,8vw,6rem)] leading-[0.9] uppercase text-ink mb-6">
             {sector.headline}

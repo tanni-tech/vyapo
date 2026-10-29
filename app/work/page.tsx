@@ -36,7 +36,7 @@ export default function WorkPage() {
                 <p className="font-body text-sm text-ink/60 mt-2">View case study →</p>
               </div>
               <div className="h-24 bg-paper border-t-2 border-ink flex items-center justify-center">
-                <span className="font-mono text-xs text-ink/20">Screenshot</span>
+                <span className="font-mono text-xs text-ink/30">{client.type}</span>
               </div>
             </Link>
           ))}

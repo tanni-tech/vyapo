@@ -6,10 +6,10 @@ import { useReveal } from '@/lib/useReveal'
 import { content } from '@/lib/content'
 
 export function AllianceSection() {
-  const wordmark = useReveal({ threshold: 0.15 })
-  const lockup = useReveal({ threshold: 0.15, delay: 200 })
-  const cardL = useReveal({ threshold: 0.15, delay: 350 })
-  const cardR = useReveal({ threshold: 0.15, delay: 450 })
+  const wordmark = useReveal({})
+  const lockup = useReveal({ delay: 0.15 })
+  const cardL = useReveal({ delay: 0.35 })
+  const cardR = useReveal({ delay: 0.45 })
 
   return (
     <section className="bg-ink text-paper py-16 sm:py-24 overflow-hidden" aria-label="Anibotix Alliance">

@@ -7,7 +7,7 @@ import { GhostNumeral } from '@/components/layout/GhostNumeral'
 const steps = content.howWeWork.steps
 
 export function HowWeWork() {
-  const header = useReveal({ threshold: 0.2 })
+  const header = useReveal({})
 
   return (
     <section className="py-20 sm:py-28 relative overflow-hidden parallax-host" aria-label="How we work">
@@ -31,7 +31,7 @@ export function HowWeWork() {
 }
 
 function StepRow({ step, index }: { step: { title: string; desc: string }; index: number }) {
-  const r = useReveal({ threshold: 0.25, delay: index * 90 })
+  const r = useReveal({ delay: index * 0.09 })
   return (
     <div ref={r.ref} className={`flex gap-4 sm:gap-8 ${r.className}`}>
       <div
